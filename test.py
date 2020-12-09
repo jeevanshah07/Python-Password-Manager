@@ -12,13 +12,16 @@ print(originalStr)
 originalStr = originalStr.replace(",", '') 
 print(originalStr)
 """
-import mysql.connector
-import totp, mail, encrypt
-from colorama import Fore, Style, Back
-from getpass import getpass
-import pickle
 import os
+import pickle
+from getpass import getpass
 
+import mysql.connector
+from colorama import Back, Fore, Style
+
+import encrypt
+import mail
+import totp
 
 db = mysql.connector.connect(
     host="localhost", user="root", passwd="r@j@71!", db="passwordManager"
@@ -28,10 +31,6 @@ c = db.cursor()
 
 
 def validate(s):
-    """
-    Credit to Sci Prog on stackoverflow for the code.
-    https://stackoverflow.com/questions/35857967/python-password-requirement-program
-    """
     SPECIAL = "@$#!&*()[].,?+=-"
 
     Cap, Low, Num, Spec, Len = False, False, False, False, False

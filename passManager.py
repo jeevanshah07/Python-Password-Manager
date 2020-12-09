@@ -15,6 +15,8 @@ db = mysql.connector.connect(
 
 c = db.cursor()
 
+cipher = encrypt.RSA_Cipher()
+cipher.generate_key(2048)
 
 def validate(s):
     """
@@ -79,7 +81,8 @@ if empty == True:
     USERPASS = input("Please enter the password you would like to login with: ")
     mail.send_test("dev87460@gmail.com", email, "EMAIL PASS")
 
-    cipher = encrypt.RSA_Cipher()
+    USERPASS = cipher.encrypt(str(USERPASS))
+    secret = cipher.encrypt(str(secret))
 
     c.execute(
         "INSERT INTO secrets (username, email, pass, secret) VALUES (%s, %s, %s, %s)",
@@ -123,7 +126,7 @@ log = getpass()
 if log == MASTERPASS:
     loginUser = input("Enter your username: ")
 
-    c.execute("SELECT username FROM secrets WHERE pass=%s", (MASTERPASS,))
+    c.execute("SELECT username FROM secrets WHERE username=%s", (loginUser,))
 
     for x in c:
         dataUser = x
@@ -135,6 +138,8 @@ if log == MASTERPASS:
 
         for x in c:
             dataPass = x
+        
+        dataPass = cipher.decrypt(dataPass)
 
         loginPass = input("Enter your password: ")
         loginPass_ = f"('{loginPass}',)"
@@ -149,6 +154,13 @@ if log == MASTERPASS:
 
             for y in c:
                 secret = str(y)
+
+            secret = cipher.decrypt(secret)
+
+            secret = secret.replace('(', '') 
+            secret = secret.replace(')', '') 
+            secret = secret.replace("'", '') 
+            secret = secret.replace(",", '') 
 
             tbotp = totp.generate_totp(secret)
             mail.send_secret("dev87460@gmail.com", dataEmail, "EMAIL PASS", tbotp)

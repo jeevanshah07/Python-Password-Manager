@@ -34,7 +34,6 @@ def generate_totp(shared_key: str, length: int = 6) -> str:
         hashlib.sha256,
     )
 
-
     return dynamic_truncation(hash, length)
 
 

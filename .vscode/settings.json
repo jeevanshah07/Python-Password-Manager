@@ -1,4 +1,8 @@
 {
+    "python.formatting.blackArgs": [
+        "--line-length",
+        "88"
+    ],
     "sqltools.connections": [
         {
             "mysqlOptions": {
@@ -28,5 +32,10 @@
         }
     ],
     "python.pythonPath": "C:\\Users\\jedim\\AppData\\Local\\Programs\\Python\\Python38\\python.exe",
-    "editor.tabSize": 2
+    "editor.tabSize": 4,
+    "python.formatting.provider": "black",
+    "python.sortImports.args": [
+        "-rc",
+        "-sp isort.cfg"
+    ],
 }

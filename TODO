@@ -1,4 +1,5 @@
 ☐ -Setup remote sql server @started(20-12-07 18:02)
+
 ✔ -Implement 2FA @started(20-12-07 18:02) @done(20-12-08 22:00) @lasted(1d3h58m36s)
     ✔ -Setup emails in python @done(20-12-07 21:57)
         ✔ -https://realpython.com/python-send-email/ @done(20-12-07 22:30)
@@ -8,16 +9,22 @@
     ✔ -Have user enter 2fa code @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m31s)
     ✔ -Check 2fa code @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m30s)
     ✔ -Allow access @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m29s)
-☐ -Setup users
+
+☐ -Setup users @started(20-12-10 11:41)
+
 ✔ -Convert console inputs to sql commands @started(20-12-07 18:02) @done(20-12-07 22:30) @lasted(4h28m22s)
 ✔ -Add masterpass functionality @done(20-12-07 22:06)
     ✔ -Create master pass if first time running @done(20-12-07 21:37)
     ✘ -Be able to change masterpass @cancelled(20-12-07 22:05)
     ✘ -Be able to reset masterpass @cancelled(20-12-07 22:06)
-☐ -Implement RSA encryption
+☐ -Implement RSA encryption @started(20-12-10 11:41)
     ☐ -https://stackoverflow.com/questions/44223479/how-to-use-rsa-or-similar-encryption-in-python-3
     ✘ -Implement json after implementing encryption (Using pickle instead) @cancelled(20-12-07 21:37)
+
 ☐ -Add comments so I know whats going on
+
+☐ -Fix code (flake8 .\passmanager.py)
+
 ✔ -Login features @done(20-12-08 22:00)
     ✔ login with masterpass @done(20-12-08 11:36)
     ✔ check masterpass against the pickle file @done(20-12-08 11:36)
@@ -27,3 +34,5 @@
     ✔ check user password against username @done(20-12-08 18:10)
     ✔ send user email with totp @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m15s)
     ✔ login with totp @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m17s)
+
+☐ -Fix login info (Entering passwords) @started(20-12-09 22:06)

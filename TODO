@@ -36,3 +36,7 @@
     ✔ login with totp @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m17s)
 
 ☐ -Fix login info (Entering passwords) @started(20-12-09 22:06)
+
+☐ -Implement GUI
+    ☐ -PyQT5
+        ☐ -https://build-system.fman.io/pyqt5-tutorial

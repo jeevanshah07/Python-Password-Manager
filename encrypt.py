@@ -27,6 +27,7 @@ class RSA_Cipher:
     plaintext = rsa_decryption_cipher.decrypt(ciphertext,16)
     return b64decode(plaintext).decode()
 
-
+'''
 cipher = RSA_Cipher()
 cipher.generate_key(1024) #key length can be 1024, 2048 or 4096
+'''

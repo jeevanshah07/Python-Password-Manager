@@ -14,9 +14,13 @@ db = mysql.connector.connect(
 )
 
 c = db.cursor()
-
 cipher = encrypt.RSA_Cipher()
-cipher.generate_key(2048)
+cipher.generate_key(1024)
+
+with open("email.pickle", "r+b") as f:
+    emailPass = pickle.load(f)
+    f.close()
+
 
 def validate(s):
     """
@@ -44,15 +48,26 @@ def validate(s):
         return False
 
 
+def quit():
+    stop = input(
+        "Would you like to do more operations? (Y for yes | Any other key for no):"
+    )
+    stopValid = ["y", "yes", "Y", "Yes"]
+    for i in stop:
+        if i in stopValid:
+            continue
+        elif i not in stopValid:
+            exit()
+
+
 MASTERPASS = ""
 USERPASS = ""
 empty = False
 
-with open("masterpass.pickle", "r+b") as f:
-    if os.path.getsize("masterpass.pickle") == 0:
+with open("save.pickle", "r+b") as f:
+    if os.path.getsize("save.pickle") == 0:
         empty = True
         f.close()
-
 
 if empty == True:
     MASTERPASS = input(
@@ -60,11 +75,12 @@ if empty == True:
         + "Welcome. To use this program you must first set a master password for you account. This master password must contain at leat 1 lowercase, 1 uppercase, 1 number, and 1 special character. Your password must also be at least 8 characters long. Make sure this is something you can remember as you cannot change this later. Please enter your password here: "
         + Style.RESET_ALL
     )
+
     print("Welcome to user setup.")
     user = input("Please enter the username you would like to login as:")
     email = input("Please enter your email: ")
     USERPASS = input("Please enter the password you would like to login with: ")
-    mail.send_test("throwawaydev307@gmail.com", email, "EMAIL PASS")
+    mail.send_test("dev87460@gmail.com", email, emailPass)
 
     secret = totp.generate_shared_secret()
     print(
@@ -75,14 +91,8 @@ if empty == True:
         + Style.RESET_ALL
     )
 
-    print("Welcome to user setup.")
-    user = input("Please enter the username you would like to login as:")
-    email = input("Please enter your email: ")
-    USERPASS = input("Please enter the password you would like to login with: ")
-    mail.send_test("dev87460@gmail.com", email, "EMAIL PASS")
-
-    USERPASS = cipher.encrypt(str(USERPASS))
-    secret = cipher.encrypt(str(secret))
+    USERPASS = cipher.encrypt(USERPASS)
+    secret = cipher.encrypt(secret)
 
     c.execute(
         "INSERT INTO secrets (username, email, pass, secret) VALUES (%s, %s, %s, %s)",
@@ -91,7 +101,7 @@ if empty == True:
     db.commit()
 
     if validate(MASTERPASS) == True:
-        with open("masterpass.pickle", "r+b") as f:
+        with open("save.pickle", "r+b") as f:
             pickle.dump(MASTERPASS, f)
             f.close()
 
@@ -104,7 +114,7 @@ if empty == True:
             )
 
             if validate(MASTERPASS) == True:
-                with open("masterpass.pickle", "r+b") as f:
+                with open("save.pickle", "r+b") as f:
                     pickle.dump(MASTERPASS, f)
                     f.close()
                 break
@@ -117,7 +127,7 @@ if empty == True:
                 )
 
 if empty == False or MASTERPASS is not None:
-    with open("masterpass.pickle", "r+b") as f:
+    with open("save.pickle", "r+b") as f:
         MASTERPASS = pickle.load(f)
         f.close()
 
@@ -134,12 +144,10 @@ if log == MASTERPASS:
     loginUser_ = f"('{loginUser}',)"
 
     if str(loginUser_) == str(dataUser):
-        c.execute("SELECT pass FROM secrets WHERE username='marvelman3284'")
+        c.execute("SELECT pass FROM secrets WHERE username=%s", (loginUser,))
 
         for x in c:
             dataPass = x
-        
-        dataPass = cipher.decrypt(dataPass)
 
         loginPass = input("Enter your password: ")
         loginPass_ = f"('{loginPass}',)"
@@ -155,15 +163,8 @@ if log == MASTERPASS:
             for y in c:
                 secret = str(y)
 
-            secret = cipher.decrypt(secret)
-
-            secret = secret.replace('(', '') 
-            secret = secret.replace(')', '') 
-            secret = secret.replace("'", '') 
-            secret = secret.replace(",", '') 
-
             tbotp = totp.generate_totp(secret)
-            mail.send_secret("dev87460@gmail.com", dataEmail, "EMAIL PASS", tbotp)
+            mail.send_secret("dev87460@gmail.com", dataEmail, emailPass, tbotp)
             enterTotp = input("Enter the code that was emailed to you: ")
 
             if tbotp == enterTotp:
@@ -175,30 +176,35 @@ if log == MASTERPASS:
                 else:
                     print("Sorry your code is not valid :(")
 
-else:
-    for i in range(2):
+if log != MASTERPASS:
+    '''for i in range(2):
         i += 1
         log = getpass("Try again:")
 
         if log == MASTERPASS:
-            break
+            pass
 
+    if i == 2: '''
     print(Fore.RED + "Sorry, wrong password" + Style.RESET_ALL)
     exit()
 
 while True:
-    what = input(
-        "What would you like to do? \n1.Add information \n2.Get information \n3.Delete information \n4.Exit \nEnter a number 1, 2, 3, or 4: "
+    what = int(
+        input(
+            "What would you like to do? \n1.Add information \n2.Get information \n3.Delete information \n4.Exit \nEnter a number 1, 2, 3, or 4: "
+        )
     )
     valid = [1, 2, 3, 4]
+
+    """
     try:
         i = int(what)
         if i in valid:
             break
-
+        
     except ValueError:
         print(Fore.RED + "You didn't enter a number" + Style.RESET_ALL)
-
+    """
     if int(what) == 1:
         site = input("Enter the site (include 'https://'): ")
         user = input("Enter the username: ")
@@ -210,26 +216,14 @@ while True:
         db.commit()
         print(Fore.GREEN + "Successfully inserted data into table!" + Style.RESET_ALL)
 
-        stop = input(
-            "Would you like to do more operations? (Y for yes | Any other key for no):"
-        )
-        if stop == "Y" or "Yes" or "y" or "yes":
-            continue
-        else:
-            exit()
+        quit()
 
     elif int(what) == 2:
         c.execute("SELECT * FROM passwords")
         for x in c:
             print(x)
 
-        stop = input(
-            "Would you like to do more operations? (Y for yes | Any other key for no):"
-        )
-        if stop == "Y" or "Yes" or "y" or "yes":
-            continue
-        else:
-            exit()
+        quit()
 
     elif int(what) == 3:
         delete = input("What would you like to delete(Enter the id):")
@@ -242,10 +236,8 @@ while True:
         stop = input(
             "Would you like to do more operations? (Y for yes | Any other key for no):"
         )
-        if stop == "Y" or "Yes" or "y" or "yes":
-            continue
-        else:
-            exit()
+
+        quit()
 
     elif int(what) == 4:
         exit()

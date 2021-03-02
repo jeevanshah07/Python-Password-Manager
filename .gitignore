@@ -2,3 +2,4 @@
 .idea/
 isort.cfg
 *.pickle
+.__pycache__/

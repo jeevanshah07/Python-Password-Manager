@@ -10,7 +10,7 @@ import mail
 import totp
 
 db = mysql.connector.connect(
-    host="localhost", user="root", passwd="r@j@71!", db="passwordManager"
+    host="192.168.86.5", user="root", passwd="starwars285", db="passwordManager"
 )
 
 c = db.cursor()

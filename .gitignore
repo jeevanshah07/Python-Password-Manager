@@ -178,3 +178,4 @@ Thumbs.db #thumbnail cache on Windows
 psudocode.txt
 *.pickle
 test.py
+!/src/

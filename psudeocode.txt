@@ -1,8 +1,0 @@
-login with masterpass 
-check masterpass against the pickle file
-then login with username
-check username against email
-ask for user password
-check user password against username
-send user email with totp
-login with totp

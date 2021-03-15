@@ -1,4 +1,4 @@
-☐ -Setup remote sql server @started(20-12-07 18:02)
+✔ -Setup remote sql server @started(20-12-07 18:02) @done(21-03-15 11:11) @lasted(13w6d16h9m36s)
 
 ✔ -Implement 2FA @started(20-12-07 18:02) @done(20-12-08 22:00) @lasted(1d3h58m36s)
     ✔ -Setup emails in python @done(20-12-07 21:57)
@@ -17,13 +17,14 @@
     ✔ -Create master pass if first time running @done(20-12-07 21:37)
     ✘ -Be able to change masterpass @cancelled(20-12-07 22:05)
     ✘ -Be able to reset masterpass @cancelled(20-12-07 22:06)
-☐ -Implement RSA encryption @started(20-12-10 11:41)
-    ☐ -https://stackoverflow.com/questions/44223479/how-to-use-rsa-or-similar-encryption-in-python-3
+
+✘ -Implement RSA encryption @started(20-12-10 11:41) @cancelled(21-03-15 11:11) @wasted(13w3d22h31m)
+    ✘ -https://stackoverflow.com/questions/44223479/how-to-use-rsa-or-similar-encryption-in-python-3 @cancelled(21-03-15 11:12)
     ✘ -Implement json after implementing encryption (Using pickle instead) @cancelled(20-12-07 21:37)
 
 ☐ -Add comments so I know whats going on
 
-☐ -Fix code (flake8 .\passmanager.py)
+☐ -Fix code (flake8 .\passmanager.py) @started(21-03-15 11:12)
 
 ✔ -Login features @done(20-12-08 22:00)
     ✔ login with masterpass @done(20-12-08 11:36)
@@ -40,3 +41,7 @@
 ☐ -Implement GUI
     ☐ -PyQT5
         ☐ -https://build-system.fman.io/pyqt5-tutorial
+
+☐ -Fix up file system
+
+✔ -Setup config file and parser @started(21-03-15 10:15) @done(21-03-15 11:15) @lasted(1h)

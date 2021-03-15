@@ -3,3 +3,4 @@
 isort.cfg
 *.pickle
 .__pycache__/
+key.key

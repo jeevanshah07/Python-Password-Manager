@@ -5,7 +5,8 @@ from getpass import getpass
 import mysql.connector
 from colorama import Back, Fore, Style
 
-import encrypt
+import encrypt as cryptic
+
 import mail
 import totp
 
@@ -14,8 +15,8 @@ db = mysql.connector.connect(
 )
 
 c = db.cursor()
-cipher = encrypt.RSA_Cipher()
-cipher.generate_key(1024)
+
+key = cryptic.get_key()
 
 with open("email.pickle", "r+b") as f:
     emailPass = pickle.load(f)
@@ -83,20 +84,19 @@ if empty == True:
     mail.send_test("dev87460@gmail.com", email, emailPass)
 
     secret = totp.generate_shared_secret()
-    print(
-        Fore.RED
-        + Back.WHITE
-        + "THIS IS VERY IMPORTANT! YOU MUST SAVE THIS KEY AS IT ALLOWS YOU TO USE THE MANAGER. SAVE THIS KEY SOMEWHERE: "
-        + secret
-        + Style.RESET_ALL
-    )
+    # print(
+    #     Fore.RED
+    #     + Back.WHITE
+    #     + "THIS IS VERY IMPORTANT! YOU MUST SAVE THIS KEY AS IT ALLOWS YOU TO USE THE MANAGER. SAVE THIS KEY SOMEWHERE: "
+    #     + secret
+    #     + Style.RESET_ALL
+    # )
 
-    USERPASS = cipher.encrypt(USERPASS)
-    secret = cipher.encrypt(secret)
+    PASS = cryptic.encrypt(USERPASS, key)
 
     c.execute(
         "INSERT INTO secrets (username, email, pass, secret) VALUES (%s, %s, %s, %s)",
-        (user, email, USERPASS, secret),
+        (user, email, PASS, secret),
     )
     db.commit()
 
@@ -147,12 +147,18 @@ if log == MASTERPASS:
         c.execute("SELECT pass FROM secrets WHERE username=%s", (loginUser,))
 
         for x in c:
-            dataPass = x
+            dataPass = str(x)
+            
+        
+        dataPass = cryptic.decrypt(dataPass, key)
 
         loginPass = input("Enter your password: ")
-        loginPass_ = f"('{loginPass}',)"
+        loginPass = bytes(str(loginPass), 'utf8')
+        print(dataPass, loginPass)
+        print(type(dataPass))
+        print(type(loginPass))
 
-        if str(loginPass_) == str(dataPass):
+        if loginPass == dataPass:
             c.execute("SELECT email FROM secrets WHERE username=%s", (loginUser,))
 
             for x in c:
@@ -175,6 +181,10 @@ if log == MASTERPASS:
 
                 else:
                     print("Sorry your code is not valid :(")
+                    quit()
+
+        else:
+            quit()
 
 if log != MASTERPASS:
     '''for i in range(2):

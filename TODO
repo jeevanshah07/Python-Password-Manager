@@ -42,8 +42,10 @@
     ☐ -PyQT5
         ☐ -https://build-system.fman.io/pyqt5-tutorial
 
-☐ -Fix up file system
+✔ -Fix up file system @started(21-03-15 19:29) @done(21-03-15 19:29) @lasted(37s)
 
 ✔ -Setup config file and parser @started(21-03-15 10:15) @done(21-03-15 11:15) @lasted(1h)
 
 ☐ -Console Menu for everything @started(21-03-15 12:51)
+
+☐ -Setup pipfile/virtual env (python -m venv passwordManager)

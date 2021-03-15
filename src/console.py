@@ -1,11 +1,7 @@
 from consolemenu import SelectionMenu
 
 
-def createMenu(options):
+def createMenu(options: list):
     selection = SelectionMenu.get_selection(options)
 
     return selection
-
-
-c = createMenu(['yes', 'no'])
-print(c)

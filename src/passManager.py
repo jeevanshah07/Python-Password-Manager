@@ -74,10 +74,10 @@ if empty is True:
 
     print("Welcome to user setup.")
     user = input("Please enter the username you would like to login as:")
-    body = input("Please enter your email: ")
+    userEmail = input("Please enter your email: ")
     USERPASS = input(
         "Please enter the password you would like to login with: ")
-    mail.send_test(email, body, emailPass)
+    mail.send_test(email, userEmail, emailPass)
 
     secret = totp.generate_shared_secret()
 
@@ -85,7 +85,7 @@ if empty is True:
 
     c.execute(
         "INSERT INTO secrets (username, email, pass, secret) VALUES (%s, %s, %s, %s)",
-        (user, email, PASS, secret),
+        (user, userEmail, PASS, secret),
     )
     db.commit()
 
@@ -154,7 +154,7 @@ if log == MASTERPASS:
                 secret = str(y)
 
             tbotp = totp.generate_totp(secret)
-            mail.send_secret("dev87460@gmail.com", dataEmail, emailPass, tbotp)
+            mail.send_secret(email, dataEmail, emailPass, tbotp)
             enterTotp = input("Enter the code that was emailed to you: ")
 
             if tbotp == enterTotp:
@@ -227,6 +227,3 @@ while True:
         db.commit()
         print("Succesfully deleted!")
 
-        stop = input(
-            "Would you like to do more operations? (Y for yes | Any other key for no):"
-        )

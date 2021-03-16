@@ -129,7 +129,21 @@ Make a copy of `config.example.ini` and name it `config.ini`. Fill in each spot.
      * `User` is the username you use to log into the server.
      * `Password` is the password for your username to log into the server.
      * `Database` is the database which your tables are going to be stored.
-5. Generate the needed tables in your MySQL server
+
+5. Duplicate the example files in /data/
+    * Copy the files:
+      * ```cp /data/key.example.key data/key.key && cp /data/save.example.pickle save.pickle```
+      * Or: 
+        * ```cd /data```
+        * ```cp key.example.key key.key```
+        * ```cp save.example.pickle save.pickle```
+    * Remove the old ones
+      * ```rm data/key.example.key && rm data/save.example.pickle```
+      * Or:
+        * ```cd /data/```
+        * ```rm key.example.key```
+        * ```rm save.example.pickle```
+6. Generate the needed tables in your MySQL server
     ```sh
     python /src/server.py
     ```

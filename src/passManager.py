@@ -226,4 +226,3 @@ while True:
         c.execute(code, (id_, ))
         db.commit()
         print("Succesfully deleted!")
-

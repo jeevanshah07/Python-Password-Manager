@@ -51,7 +51,7 @@
 
 
 <!-- TABLE OF CONTENTS -->
-<details open="open">
+<details>
     <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
     <ol>
         <li>

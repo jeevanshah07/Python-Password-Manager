@@ -52,4 +52,9 @@
 
 ☐ -Update README.md @started(21-03-15 20:46)
 
-✔ -Create a python files to setup the MySQL database (src/server.py) @done(21-03-16 01:04)
+☐ -Create a python files to setup the MySQL database (src/server.py) @started(21-03-16 12:27)
+    ☐ -Check if the tables are in existanse
+        ☐ -If they are do nothing
+        ☐ -If they aren't create then
+
+    ☐ -Store key in DB and write "You really thought I was that stupid" in key.key"

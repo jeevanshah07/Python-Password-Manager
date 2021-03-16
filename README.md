@@ -20,13 +20,12 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+[![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://www.python.org)
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -154,6 +153,7 @@ Make a copy of `config.example.ini` and name it `config.ini`. Fill in each spot.
     ```sh
     python /src/server.py
     ```
+    * > **ONLY RUN THIS IF YOU DO NOT HAVE THE MYSQL DATABASE SET UP OTHERWISE IT WILL BREAK**
 
 
 <!-- USAGE EXAMPLES -->

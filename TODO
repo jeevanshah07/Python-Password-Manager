@@ -36,7 +36,7 @@
     ✔ send user email with totp @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m15s)
     ✔ login with totp @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m17s)
 
-☐ -Fix login info (Entering passwords) @started(20-12-09 22:06)
+✔ -Fix login info (Entering passwords)  @started(20-12-09 22:06) @done(21-03-16 01:05) @lasted(13w5d1h59m15s) Finished 
 
 ☐ -Implement GUI
     ☐ -PyQT5
@@ -51,3 +51,5 @@
 ☐ -Setup pipfile/virtual env (python -m venv passwordManager)
 
 ☐ -Update README.md @started(21-03-15 20:46)
+
+✔ -Create a python files to setup the MySQL database (src/server.py) @done(21-03-16 01:04)

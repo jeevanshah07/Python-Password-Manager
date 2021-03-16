@@ -25,7 +25,6 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
@@ -39,7 +38,7 @@
   <h3 align="center">Python Password Manager</h3>
 
   <p align="center">
-    A CLI based password manager created with python and mysq
+    A CLI based password manager
     <br />
     <a href="https://github.com/marvelman3284/Python-Password-Manager"><strong>Explore the docs »</strong></a>
     <br />
@@ -94,9 +93,9 @@ Here's a blank template to get started:
 
 ### Built With
 
-* []()
-* []()
-* []()
+* [Python](https://python.org)
+* [MySQL](https://www.mysql.com/)
+* [Stack Overflow](https://stackoverflow.com/)
 
 
 
@@ -108,9 +107,9 @@ To get a local copy up and running follow these simple steps.
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
+* pip
   ```sh
-  npm install npm@latest -g
+  python3 -m pip install --upgrade pip
   ```
 
 ### Installation
@@ -119,10 +118,21 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    git clone https://github.com/marvelman3284/Python-Password-Manager.git
    ```
-2. Install NPM packages
+2. Create your virutal enviorment
    ```sh
-   npm install
+   python3 -m venv env
    ```
+3. Install python packages
+   ```sh
+   pipenv install && pipenv install-dev
+   ```
+4. Insert the necessary information to the config file
+Make a copy of `config.example.ini` and name it `config.ini`. Fill in each spot.
+* `[Email]`
+  * `Email` is the actual email you want to use (example@example.com)
+    * This is built to use a gmail email, for anything else you will have to make your own configurations.
+    *   > If you are using gmail you __must__ turn on **_Allow Access for Less Secure Apps_** in your email settings
+  * `Password` is the password for your email
 
 
 
@@ -184,15 +194,13 @@ Project Link: [https://github.com/marvelman3284/Python-Password-Manager](https:/
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/marvelman3284/repo.svg?style=for-the-badge
-[contributors-url]: https://github.com/marvelman3284/repo/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/marvelman3284/repo.svg?style=for-the-badge
-[forks-url]: https://github.com/marvelman3284/repo/network/members
-[stars-shield]: https://img.shields.io/github/stars/marvelman3284/repo.svg?style=for-the-badge
-[stars-url]: https://github.com/marvelman3284/repo/stargazers
-[issues-shield]: https://img.shields.io/github/issues/marvelman3284/repo.svg?style=for-the-badge
-[issues-url]: https://github.com/marvelman3284/repo/issues
-[license-shield]: https://img.shields.io/github/license/marvelman3284/repo.svg?style=for-the-badge
-[license-url]: https://github.com/marvelman3284/repo/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/marvelman3284
+[contributors-shield]: https://img.shields.io/github/contributors/marvelman3284/Python-Password-Manager.svg?style=for-the-badge
+[contributors-url]: https://github.com/marvelman3284/Python-Password-Manager/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/marvelman3284/Python-Password-Manager.svg?style=for-the-badge
+[forks-url]: https://github.com/marvelman3284/Python-Password-Manager/network/members
+[stars-shield]: https://img.shields.io/github/stars/marvelman3284/Python-Password-Manager.svg?style=for-the-badge
+[stars-url]: https://github.com/marvelman3284/Python-Password-Manager/stargazers
+[issues-shield]: https://img.shields.io/github/issues/marvelman3284/Python-Password-Manager.svg?style=for-the-badge
+[issues-url]: https://github.com/marvelman3284/Python-Password-Manager/issues
+[license-shield]: https://img.shields.io/github/license/marvelman3284/Python-Password-Manager.svg?style=for-the-badge
+[license-url]: https://github.com/marvelman3284/Python-Password-Manager/blob/master/LICENSE.txt

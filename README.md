@@ -52,7 +52,7 @@
 
 <!-- TABLE OF CONTENTS -->
 <details>
-    <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
+    <summary><b>Table of Contents</b></summary>
     <ol>
         <li>
             <a href="#about-the-project">About The Project</a>
@@ -75,7 +75,6 @@
         <li><a href="#acknowledgements">Acknowledgements</a></li>
     </ol>
 </details>
-
 
 
 <!-- ABOUT THE PROJECT -->

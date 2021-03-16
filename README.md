@@ -52,7 +52,7 @@
 
 <!-- TABLE OF CONTENTS -->
 <details>
-    <summary><b>Table of Contents</b></summary>
+    <summary><h2><h>Table of Contents</b></h2></summary>
     <ol>
         <li>
             <a href="#about-the-project">About The Project</a>

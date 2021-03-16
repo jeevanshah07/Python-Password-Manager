@@ -31,65 +31,56 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/marvelman3284/Python-Password-Manager">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
-  <h3 align="center">Python Password Manager</h3>
-
-  <p align="center">
-    A CLI based password manager
-    <br />
-    <a href="https://github.com/marvelman3284/Python-Password-Manager"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/marvelman3284/Python-Password-Manager">View Demo</a>
-    ·
-    <a href="https://github.com/marvelman3284/Python-Password-Manager/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/marvelman3284/Python-Password-Manager/issues">Request Feature</a>
-  </p>
+    <a href="https://github.com/marvelman3284/Python-Password-Manager">
+        <img src="images/logo.png" alt="Logo" width="80" height="80">
+    </a>
+    <h3 align="center">Python Password Manager</h3>
+    <p align="center">
+        A CLI based password manager
+        <br />
+        <a href="https://github.com/marvelman3284/Python-Password-Manager"><strong>Explore the docs »</strong></a>
+        <br />
+        <br />
+        <a href="https://github.com/marvelman3284/Python-Password-Manager">View Demo</a>
+        ·
+        <a href="https://github.com/marvelman3284/Python-Password-Manager/issues">Report Bug</a>
+        ·
+        <a href="https://github.com/marvelman3284/Python-Password-Manager/issues">Request Feature</a>
+    </p>
 </p>
 
 
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
-  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
-  </ol>
+    <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
+    <ol>
+        <li>
+            <a href="#about-the-project">About The Project</a>
+            <ul>
+                <li><a href="#built-with">Built With</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#getting-started">Getting Started</a>
+            <ul>
+                <li><a href="#prerequisites">Prerequisites</a></li>
+                <li><a href="#installation">Installation</a></li>
+            </ul>
+        </li>
+        <li><a href="#usage">Usage</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="#contributing">Contributing</a></li>
+        <li><a href="#license">License</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#acknowledgements">Acknowledgements</a></li>
+    </ol>
 </details>
 
 
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`marvelman3284`, `Python-Password-Manager`, `marvelman3284`, `jedimaster2384@gmail.com`, `Python Password Manager`, `A CLI based password manager created with python and mysq`
-
 
 ### Built With
 
@@ -108,32 +99,40 @@ To get a local copy up and running follow these simple steps.
 
 This is an example of how to list things you need to use the software and how to install them.
 * pip
-  ```sh
-  python3 -m pip install --upgrade pip
-  ```
+    ```sh
+    python3 -m pip install --upgrade pip
+    ```
 
 ### Installation
 
 1. Clone the repo
-   ```sh
-   git clone https://github.com/marvelman3284/Python-Password-Manager.git
-   ```
+     ```sh
+     git clone https://github.com/marvelman3284/Python-Password-Manager.git
+     ```
 2. Create your virutal enviorment
-   ```sh
-   python3 -m venv env
-   ```
+     ```sh
+     python3 -m venv env
+     ```
 3. Install python packages
-   ```sh
-   pipenv install && pipenv install-dev
-   ```
+     ```sh
+     pipenv install && pipenv install-dev
+     ```
 4. Insert the necessary information to the config file
 Make a copy of `config.example.ini` and name it `config.ini`. Fill in each spot.
-* `[Email]`
-  * `Email` is the actual email you want to use (example@example.com)
-    * This is built to use a gmail email, for anything else you will have to make your own configurations.
-    *   > If you are using gmail you __must__ turn on **_Allow Access for Less Secure Apps_** in your email settings
-  * `Password` is the password for your email
-
+   * `[Email]`
+     * `Email` is the actual email you want to use (example@example.com)
+       * This is built to use a gmail email, for anything else you will have to make your own configurations.
+       *   > If you are using gmail you __must__ turn on **_Allow Access for Less Secure Apps_** in your email settings
+     * `Password` is the password for your email
+   * `[MySql]`
+     * `Host` is the ip for the server where you are hosting the database. Use `localhost` if the server is hosted on your computer.
+     * `User` is the username you use to log into the server.
+     * `Password` is the password for your username to log into the server.
+     * `Database` is the database which your tables are going to be stored.
+5. Generate the needed tables in your MySQL server
+    ```sh
+    python /src/server.py
+    ```
 
 
 <!-- USAGE EXAMPLES -->
@@ -148,8 +147,8 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/marvelman3284/Python-Password-Manager/issues) for a list of proposed features (and known issues).
-
+See the [open issues](https://github.com/marvelman3284/Python-Password-Manager/issues) for a list of known issues.
+There is also [The TODO File](https://github.com/marvelman3284/Python-Password-Manager/TODO) which contains a list of features that need to be worked on or are in development. (TODO file is using the [TODO+](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-todo-plus) vscode extension.) 
 
 
 <!-- CONTRIBUTING -->
@@ -175,8 +174,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@marvelman3284](https://twitter.com/marvelman3284) - jedimaster2384@gmail.com
-
+Your Name - [@marvelman3284](https://twitter.com/marvelman3284) - jedimaster2384@gmail.com - Marvelman3284#6554
 Project Link: [https://github.com/marvelman3284/Python-Password-Manager](https://github.com/marvelman3284/Python-Password-Manager)
 
 
@@ -184,9 +182,13 @@ Project Link: [https://github.com/marvelman3284/Python-Password-Manager](https:/
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 
-* []()
-* []()
-* []()
+* [othneildrew for the README.md template](https://github.com/othneildrew/Best-README-Template/blob/master/BLANK_README.md)
+* [Credit to Luiz Rosa on hackernoon for the code in `/src/totp.py`](https://hackernoon.com/implementing-2fa-how-time-based-one-time-password-actually-works-with-python-examples-cm1m3ywt)
+* [Credit to Sci Prog on stackoverflow for the validate function in `src/passManager.py`](https://stackoverflow.com/questions/35857967/python-password-requirement-program)
+* [Credit to PyTutorials on nitratine for the code snippetes in `src/encrypt.py`](https://nitratine.net/blog/post/encryption-and-decryption-in-python/)
+* [Credit to TheOtherUnkown for the flake8 workflow in `/.github/workflows/flake8.yml`](https://github.com/TheOtherUnknown/Malcolm-next/blob/master/.github/workflows/flake8.yml)
+* [`.gitignore` from toptal.com](https://www.toptal.com/developers/gitignore/api/python,vscode,archlinuxpackages)
+)
 
 
 

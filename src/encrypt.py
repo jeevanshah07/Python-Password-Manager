@@ -1,3 +1,8 @@
+"""
+Credit to PyTutorials on Nitratine for the code snippets
+https://nitratine.net/blog/post/encryption-and-decryption-in-python/
+"""
+
 from cryptography.fernet import Fernet
 import os
 

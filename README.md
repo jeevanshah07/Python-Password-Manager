@@ -132,7 +132,8 @@ Make a copy of `config.example.ini` and name it `config.ini`. Fill in each spot.
 5. Duplicate the example files in /data/
     * Copy the files:
       * ```sh
-        cp /data/key.example.key data/key.key && cp /data/save.example.pickle save.pickle```
+        cp /data/key.example.key data/key.key && cp /data/save.example.pickle save.pickle
+        ```
       * Or: 
         ```sh
         cd /data
@@ -210,7 +211,7 @@ Project Link: [https://github.com/marvelman3284/Python-Password-Manager](https:/
 * [Credit to PyTutorials on nitratine for the code snippetes in `src/encrypt.py`](https://nitratine.net/blog/post/encryption-and-decryption-in-python/)
 * [Credit to TheOtherUnkown for the flake8 workflow in `/.github/workflows/flake8.yml`](https://github.com/TheOtherUnknown/Malcolm-next/blob/master/.github/workflows/flake8.yml)
 * [`.gitignore` from toptal.com](https://www.toptal.com/developers/gitignore/api/python,vscode,archlinuxpackages)
-)
+
 
 
 

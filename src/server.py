@@ -15,19 +15,18 @@ db = mysql.connector.connect(host=host,
 c = db.cursor()
 
 c.execute("""CREATE TABLE passwords (
-	site VARCHAR(500) NOT NULL,
-	username VARCHAR(500) NOT NULL,
-	password VARCHAR(500) NOT NULL,
-	PRIMARY KEY id AUTO_INCREMENT NOT NULL
-	)""")
+        site VARCHAR(500) NOT NULL,
+        username VARCHAR(500) NOT NULL,
+        password VARCHAR(500) NOT NULL,
+        PRIMARY KEY id AUTO_INCREMENT NOT NULL
+        )""")
 
 db.commit()
 
 c.execute("""CREATE TABLE secrets (
-	username VARCHAR(500) NOT NULL,
-	email VARCHAR(100) NOT NULL,
-	pass VARCHAR(500) NOT NULL,
-	secret VARCHAR(500) NOT NULL
-	)""")
+        username VARCHAR(500) NOT NULL,
+        email VARCHAR(100) NOT NULL,    pass VARCHAR(500) NOT NULL,
+        secret VARCHAR(500) NOT NULL
+        )""")
 
 db.commit()

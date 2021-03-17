@@ -1,0 +1,12 @@
+name: YAPF Formatting Check
+on: [push]
+jobs:
+  formatting-check:
+    name: Formatting Check
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: run YAPF to format the python code
+      uses: block42-blockchain-company/yapf-action
+      with:
+        args: --verbose

@@ -11,7 +11,6 @@ import mail
 import totp
 import server
 
-
 c, db = server.connect()
 
 key = cryptic.get_key()
@@ -191,7 +190,8 @@ if log != MASTERPASS:
     exit()
 
 while True:
-    menu = console.createMenu(['Add information', 'Get information', 'Delete information'])
+    menu = console.createMenu(
+        ['Add information', 'Get information', 'Delete information'])
     """
     what = int(
         input(

@@ -9,6 +9,10 @@ from colorama import Fore, Style
 import encrypt as cryptic
 import mail
 import totp
+import server
+
+
+c, db = server.connect()
 
 key = cryptic.get_key()
 

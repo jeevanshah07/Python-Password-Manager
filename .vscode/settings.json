@@ -6,5 +6,5 @@
         "--max-line-length=120",
         "--extend-ignore=E401, E501"
     ],
-    "python.pythonPath": "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
+    "python.pythonPath": "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe"
 }

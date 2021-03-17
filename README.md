@@ -20,12 +20,13 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://www.python.org)
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![GPL-3.0 License][license-shield]][license-url]
 
 <!-- PROJECT LOGO -->
 <br />
@@ -51,8 +52,8 @@
 
 
 <!-- TABLE OF CONTENTS -->
-<details>
-    <summary><h3><h>Table of Contents</b></h3></summary>
+<details open="open">
+    <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
     <ol>
         <li>
             <a href="#about-the-project">About The Project</a>
@@ -85,13 +86,13 @@
 * [Python](https://python.org)
 * [MySQL](https://www.mysql.com/)
 * [Stack Overflow](https://stackoverflow.com/)
-
+* [Visual Studio Code](https://code.visualstudio.com)
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
+To get a local version up and running follow these simple steps.
 
 ### Prerequisites
 
@@ -189,7 +190,7 @@ Contributions are what make the open source community such an amazing place to b
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 
 
 

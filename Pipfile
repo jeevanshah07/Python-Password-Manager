@@ -4,14 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-cryptography = "*"
 "console-menu" = "*"
 "mysql-connector" = "*"
-
+cryptography = "*"
+colorama = "*"
 
 [dev-packages]
-flake8 = "*"
 yapf = "*"
+flake9 = "*"
 
 [requires]
 python_version = "3.9"

@@ -1,48 +1,36 @@
 import os
 import pickle
-from getpass import getpass
 from configparser import ConfigParser
-import console
-import mysql.connector
+from getpass import getpass
+
 from colorama import Fore, Style
 
+import console
 import encrypt as cryptic
 import mail
-import totp
 import server
-
-c, db = server.connect()
+import totp
 
 key = cryptic.get_key()
 
 config = ConfigParser()
 config.read('config.ini')
 
-host = config.get("MySQL", "Host")
-user = config.get("MySQL", "User")
-dbPassword = config.get("MySQL", "Password")
-database = config.get("MySQL", "Database")
-
 email = config.get("Email", "Email")
 emailPass = config.get("Email", "Password")
 
+db = server.db
+c = db.cursor()
 MASTERPASS = ""
 USERPASS = ""
 empty = False
 
-db = mysql.connector.connect(host=host,
-                             user=user,
-                             passwd=dbPassword,
-                             db=database)
-
-c = db.cursor()
-
 
 def validate(s):
     """
-    Credit to Sci Prog on stackoverflow for the code.
-    https://stackoverflow.com/questions/35857967/python-password-requirement-program
-    """
+	Credit to Sci Prog on stackoverflow for the code.
+	https://stackoverflow.com/questions/35857967/python-password-requirement-program
+	"""
     SPECIAL = "@$#!&*()[].,?+=-"
 
     Cap, Low, Num, Spec, Len = False, False, False, False, False
@@ -120,92 +108,63 @@ if empty is False or MASTERPASS is not None:
     with open("data/save.pickle", "r+b") as f:
         MASTERPASS = pickle.load(f)
 
-log = getpass()
+log = getpass("Master Password:")
 
 if log == MASTERPASS:
-    loginUser = input("Enter your username: ")
 
-    c.execute("SELECT username FROM secrets WHERE username=%s", (loginUser, ))
+    user = console.createUserMenu()
+
+    c.execute("SELECT pass FROM secrets WHERE username=%s", (user, ))
 
     for x in c:
-        dataUser = x
+        dataPass = str(x)
 
-    loginUser_ = f"('{loginUser}',)"
+    dataPass = cryptic.decrypt(dataPass, key)
 
-    if str(loginUser_) == str(dataUser):
-        c.execute("SELECT pass FROM secrets WHERE username=%s", (loginUser, ))
+    loginPass = getpass("Enter your password: ")
+    loginPass = bytes(str(loginPass), 'utf8')
+
+    if loginPass == dataPass:
+        c.execute("SELECT email FROM secrets WHERE username=%s", (user, ))
 
         for x in c:
-            dataPass = str(x)
+            dataEmail = x
 
-        dataPass = cryptic.decrypt(dataPass, key)
+        c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
 
-        loginPass = getpass("Enter your password: ")
-        loginPass = bytes(str(loginPass), 'utf8')
+        for y in c:
+            secret = str(y)
 
-        if loginPass == dataPass:
-            c.execute("SELECT email FROM secrets WHERE username=%s",
-                      (loginUser, ))
+        tbotp = totp.generate_totp(secret)
+        mail.send_secret(email, dataEmail, emailPass, tbotp)
+        enterTotp = input("Enter the code that was emailed to you: ")
 
-            for x in c:
-                dataEmail = x
+        if tbotp == enterTotp:
+            validation = totp.validate_totp(enterTotp, secret)
 
-            c.execute("SELECT secret FROM secrets WHERE username=%s",
-                      (loginUser, ))
-
-            for y in c:
-                secret = str(y)
-
-            tbotp = totp.generate_totp(secret)
-            mail.send_secret(email, dataEmail, emailPass, tbotp)
-            enterTotp = input("Enter the code that was emailed to you: ")
-
-            if tbotp == enterTotp:
-                validation = totp.validate_totp(enterTotp, secret)
-
-                if validate:
-                    print("Your code is valid, proceed on!")
-
-                else:
-                    print("Sorry your code is not valid :(")
-                    exit()
+            if validate:
+                print("Your code is valid, proceed on!")
 
             else:
-                print("Sorry that's the wrong code.")
+                print(Fore.RED + "Invalid Code!" + Style.RESET_ALL)
                 exit()
 
         else:
+            print(Fore.RED + "Wrong Code!" + Style.RESET_ALL)
             exit()
 
-if log != MASTERPASS:
-    '''for i in range(2):
-        i += 1
-        log = getpass("Try again:")
+    else:
+        print(Fore.RED + "Wrong Password!" + Style.RESET_ALL)
+        exit()
 
-        if log == MASTERPASS:
-            pass
-
-    if i == 2: '''
-    print(Fore.RED + "Sorry, wrong password" + Style.RESET_ALL)
+else:
+    print(Fore.RED + "Wrong Master Password!" + Style.RESET_ALL)
     exit()
 
 while True:
     menu = console.createMenu(
         ['Add information', 'Get information', 'Delete information'])
-    """
-    what = int(
-        input(
-            "What would you like to do? \n1.Add information \n2.Get information \n3.Delete information \n4.Exit \nEnter a number 1, 2, 3, or 4: "
-        ))
-    valid = [1, 2, 3, 4]
-    try:
-        i = int(what)
-        if i in valid:
-            break
 
-    except ValueError:
-        print(Fore.RED + "You didn't enter a number" + Style.RESET_ALL)
-    """
     if menu == 0:
         site = input("Enter the site (include 'https://'): ")
         user = input("Enter the username: ")
@@ -230,3 +189,7 @@ while True:
         c.execute(code, (id_, ))
         db.commit()
         print("Succesfully deleted!")
+
+    elif menu == 3:
+        print(Fore.LIGHTMAGENTA_EX + "Bye!")
+        exit()

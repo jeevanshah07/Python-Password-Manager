@@ -1,44 +1,51 @@
 import mysql.connector
 from configparser import ConfigParser
+from colorama import Fore, Style
+
+config = ConfigParser()
+config.read('config.ini')
+
+host = config.get("MySQL", "Host")
+user = config.get("MySQL", "User")
+password = config.get("MySQL", "Password")
+database = config.get("MySQL", "Database")
 
 
-def connect():
-    config = ConfigParser()
-    config.read('config.ini')
-
-    host = config.get("MySQL", "Host")
-    user = config.get("MySQL", "User")
-    password = config.get("MySQL", "Password")
-    database = config.get("MySQL", "Database")
+def connect(host, user, password, databse):
     db = mysql.connector.connect(host=host,
                                  user=user,
                                  passwd=password,
                                  db=database)
 
-    cursor = db.cursor
-    return cursor, db
+    return db
 
 
-c, db = connect()
+db = connect(host, user, password, database)
+c = db.cursor()
 
 
 def create_tables(cursor, db):
 
-    c.execute("""CREATE TABLE passwords IF NOT EXISTS (
+    cursor.execute("""CREATE TABLE IF NOT EXISTS passwords (
                                         site VARCHAR(500) NOT NULL,
                                         username VARCHAR(500) NOT NULL,
                                         password VARCHAR(500) NOT NULL,
-                                        PRIMARY KEY id AUTO_INCREMENT NOT NULL
+                                        id int PRIMARY KEY AUTO_INCREMENT
                                         )""")
 
     db.commit()
 
-    c.execute("""CREATE TABLE IF NOT EXISTS secrets (
+    print(Fore.MAGENTA + "Table passwords created!" + Style.RESET_ALL)
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS secrets (
                                         username VARCHAR(500) NOT NULL,
-                                        email VARCHAR(100) NOT NULL,    pass VARCHAR(500) NOT NULL,
+                                        email VARCHAR(100) NOT NULL,
                                         secret VARCHAR(500) NOT NULL,
-                                        key VARCHAR(200),
-                                        PRIMARY KEY id AUTO_INCREMENT NOT NULL
+                                        pass VARCHAR(500) NOT NULL,
+                                        `key` VARCHAR(500),
+                                        id int PRIMARY KEY AUTO_INCREMENT
                                         )""")
 
     db.commit()
+
+    print(Fore.MAGENTA + "Table secrets created!" + Style.RESET_ALL)

@@ -10,23 +10,22 @@
     ✔ -Check 2fa code @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m30s)
     ✔ -Allow access @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m29s)
 
-☐ -Setup users @started(20-12-10 11:41)
-
-✔ -Convert console inputs to sql commands @started(20-12-07 18:02) @done(20-12-07 22:30) @lasted(4h28m22s)
-✔ -Add masterpass functionality @done(20-12-07 22:06)
+    
+    ✔ -Convert console inputs to sql commands @started(20-12-07 18:02) @done(20-12-07 22:30) @lasted(4h28m22s)
+    ✔ -Add masterpass functionality @done(20-12-07 22:06)
     ✔ -Create master pass if first time running @done(20-12-07 21:37)
     ✘ -Be able to change masterpass @cancelled(20-12-07 22:05)
     ✘ -Be able to reset masterpass @cancelled(20-12-07 22:06)
-
-✘ -Implement RSA encryption @started(20-12-10 11:41) @cancelled(21-03-15 11:11) @wasted(13w3d22h31m)
+    
+    ✘ -Implement RSA encryption @started(20-12-10 11:41) @cancelled(21-03-15 11:11) @wasted(13w3d22h31m)
     ✘ -https://stackoverflow.com/questions/44223479/how-to-use-rsa-or-similar-encryption-in-python-3 @cancelled(21-03-15 11:12)
     ✘ -Implement json after implementing encryption (Using pickle instead) @cancelled(20-12-07 21:37)
-
-☐ -Add comments so I know whats going on
-
-☐ -Fix code (flake8 .\passmanager.py) @started(21-03-15 11:12)
-
-✔ -Login features @done(20-12-08 22:00)
+    
+    ☐ -Add comments so I know whats going on
+    
+    ✔ -Fix code (flake8 .\passmanager.py) @started(21-03-15 11:12) @done(21-03-18 17:56) @lasted(3d6h44m42s) # Never ending so just stopping it here
+    
+    ✔ -Login features @done(20-12-08 22:00)
     ✔ login with masterpass @done(20-12-08 11:36)
     ✔ check masterpass against the pickle file @done(20-12-08 11:36)
     ✔ then login with username @done(20-12-08 11:38)
@@ -35,26 +34,40 @@
     ✔ check user password against username @done(20-12-08 18:10)
     ✔ send user email with totp @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m15s)
     ✔ login with totp @started(20-12-08 18:10) @done(20-12-08 22:00) @lasted(3h50m17s)
+    
+    ✔ -Fix login info (Entering passwords)  @started(20-12-09 22:06) @done(21-03-16 01:05) @lasted(13w5d1h59m15s) Finished 
+    
+    
+    ✔ -Fix up file system @started(21-03-15 19:29) @done(21-03-15 19:29) @lasted(37s)
+    
+    ✔ -Setup config file and parser @started(21-03-15 10:15) @done(21-03-15 11:15) @lasted(1h)
+    ☐ -Front End Stuff
+        ☐ -Implement GUI
+            ☐ -PyQT5
+            ☐ -https://build-system.fman.io/pyqt5-tutorial
+        ☐ -Setup website
+            ☐ -Use flask
+            ☐ -Learn flask @started(21-03-18 18:03)
+            ☐ -Setup on pi using nginx
+                    ☐ -https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04
 
-✔ -Fix login info (Entering passwords)  @started(20-12-09 22:06) @done(21-03-16 01:05) @lasted(13w5d1h59m15s) Finished 
 
-☐ -Implement GUI
-    ☐ -PyQT5
-        ☐ -https://build-system.fman.io/pyqt5-tutorial
+    ☐ -Create CLI menu @started(21-03-18 18:02)
+        ☐ -Console Menu for everything @started(21-03-15 12:51)
+        ☐ -Allow for running without `.py` (add an alias -> echo .zshrc >> alias manager="$Directory python src/passManager.py")
+        ☐ -Need to dectect current directory
+        ☐ -Allow for flags to be passed (-a, --version, etc) [https://docs.python.org/3/library/argparse.html]
+        ☐ -Setup users @started(20-12-10 11:41)
+            ☐ -Use rich.prompt (https://rich.readthedocs.io/en/latest/prompt.html)
+    
 
-✔ -Fix up file system @started(21-03-15 19:29) @done(21-03-15 19:29) @lasted(37s)
-
-✔ -Setup config file and parser @started(21-03-15 10:15) @done(21-03-15 11:15) @lasted(1h)
-
-☐ -Console Menu for everything @started(21-03-15 12:51)
-
-☐ -Setup pipfile/virtual env (python -m venv passwordManager) @started(21-03-16 17:04)
+✔ -Setup pipfile/virtual env (python -m venv passwordManager) @started(21-03-16 17:04) @done(21-03-18 17:57) @lasted(2d53m1s)
 
 ☐ -Update README.md @started(21-03-15 20:46)
 
 ☐ -Create a python files to setup the MySQL database (src/server.py) @started(21-03-16 12:27)
-    ☐ -Check if the tables are in existanse
-        ☐ -If they are do nothing
-        ☐ -If they aren't create then
+    ☐ -Check if the tables are in existanse @started(21-03-18 17:57)
+        ☐ -If they are do nothing @started(21-03-18 20:19)
+        ☐ -If they aren't create then @started(21-03-18 20:19)
 
     ☐ -Store key in DB and write "You really thought I was that stupid" in key.key"

@@ -181,3 +181,4 @@ test.py
 !/src/
 !/data/key.example.key
 !/data/save.example.pickle
+test.py

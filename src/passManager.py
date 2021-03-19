@@ -24,9 +24,10 @@ c = db.cursor()
 MASTERPASS = ""
 USERPASS = ""
 empty = False
+valid = False
 
 
-def validate(s):
+def validate(password: str):
     """
 	Credit to Sci Prog on stackoverflow for the code.
 	https://stackoverflow.com/questions/35857967/python-password-requirement-program
@@ -34,7 +35,7 @@ def validate(s):
     SPECIAL = "@$#!&*()[].,?+=-"
 
     Cap, Low, Num, Spec, Len = False, False, False, False, False
-    for i in s:
+    for i in password:
         if i.isupper():
             Cap = True
         elif i.islower():
@@ -43,7 +44,7 @@ def validate(s):
             Num = True
         elif i in SPECIAL:
             Spec = True
-    if len(s) >= 8:
+    if len(password) >= 8:
         Len = True
 
     if Cap and Low and Num and Spec and Len:
@@ -58,10 +59,42 @@ with open("data/save.pickle", "r+b") as f:
         f.close()
 
 if empty is True:
-    MASTERPASS = input(
-        Fore.LIGHTCYAN_EX +
-        "Welcome. To use this program you must first set a master password for you account. This master password must contain at leat 1 lowercase, 1 uppercase, 1 number, and 1 special character. Your password must also be at least 8 characters long. Make sure this is something you can remember as you cannot change this later. Please enter your password here: "
-        + Style.RESET_ALL)
+    while valid is False:
+        MASTERPASS = input(
+            Fore.LIGHTCYAN_EX +
+            "Welcome. To use this program you must first set a master password for you account. This master password must contain at leat 1 lowercase, 1 uppercase, 1 number, and 1 special character. Your password must also be at least 8 characters long. Make sure this is something you can remember as you cannot change this later. Please enter your password here: "
+            + Style.RESET_ALL)
+
+        if validate(MASTERPASS) is True:
+            with open("data/save.pickle", "r+b") as f:
+                pickle.dump(MASTERPASS, f)
+                f.close()
+
+            valid = True
+
+        elif validate(MASTERPASS) is False:
+            while True:
+                print(
+                    Fore.RED +
+                    "\nTry Again! Make sure your password is at least 8 charaters long and contaions 1 lowercase, 1 uppercase, 1 number, and 1 special character. \n"
+                    + Style.RESET_ALL)
+
+                MASTERPASS = input(
+                    Fore.LIGHTCYAN_EX +
+                    "Welcome. To use this program you must first set a master password. This master password must contain at leat 1 lowercase, 1 uppercase, 1 number, and 1 special character. Your password must also be at least 8 characters long. Please enter your password here: "
+                    + Style.RESET_ALL)
+
+                if validate(MASTERPASS) is True:
+                    with open("data/save.pickle", "r+b") as f:
+                        pickle.dump(MASTERPASS, f)
+                        f.close()
+                    break
+
+                else:
+                    print(
+                        Fore.RED +
+                        "\nTry Again! Make sure your password is at least 8 charaters long and contaions 1 lowercase, 1 uppercase, 1 number, and 1 special character. \n"
+                        + Style.RESET_ALL)
 
     print("Welcome to user setup.")
     user = input("Please enter the username you would like to login as:")
@@ -75,34 +108,10 @@ if empty is True:
     PASS = cryptic.encrypt(USERPASS, key)
 
     c.execute(
-        "INSERT INTO secrets (username, email, pass, secret) VALUES (%s, %s, %s, %s)",
+        "INSERT INTO secrets (username, email, pass, secret) VALUES (%password, %password, %password, %password)",
         (user, userEmail, PASS, secret),
     )
     db.commit()
-
-    if validate(MASTERPASS) is True:
-        with open("data/save.pickle", "r+b") as f:
-            pickle.dump(MASTERPASS, f)
-            f.close()
-
-    elif validate(MASTERPASS) is False:
-        while True:
-            MASTERPASS = input(
-                Fore.LIGHTCYAN_EX +
-                "Welcome. To use this program you must first set a master password. This master password must contain at leat 1 lowercase, 1 uppercase, 1 number, and 1 special character. Your password must also be at least 8 characters long. Please enter your password here: "
-                + Style.RESET_ALL)
-
-            if validate(MASTERPASS) is True:
-                with open("data/save.pickle", "r+b") as f:
-                    pickle.dump(MASTERPASS, f)
-                    f.close()
-                break
-
-            else:
-                print(
-                    Fore.RED +
-                    "\nTry Again! Make sure your password is at least 8 charaters long and contaions 1 lowercase, 1 uppercase, 1 number, and 1 special character. \n"
-                    + Style.RESET_ALL)
 
 if empty is False or MASTERPASS is not None:
     with open("data/save.pickle", "r+b") as f:
@@ -114,7 +123,7 @@ if log == MASTERPASS:
 
     user = console.createUserMenu()
 
-    c.execute("SELECT pass FROM secrets WHERE username=%s", (user, ))
+    c.execute("SELECT pass FROM secrets WHERE username=%password", (user, ))
 
     for x in c:
         dataPass = str(x)
@@ -125,12 +134,14 @@ if log == MASTERPASS:
     loginPass = bytes(str(loginPass), 'utf8')
 
     if loginPass == dataPass:
-        c.execute("SELECT email FROM secrets WHERE username=%s", (user, ))
+        c.execute("SELECT email FROM secrets WHERE username=%password",
+                  (user, ))
 
         for x in c:
             dataEmail = x
 
-        c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
+        c.execute("SELECT secret FROM secrets WHERE username=%password",
+                  (user, ))
 
         for y in c:
             secret = str(y)
@@ -170,7 +181,7 @@ while True:
         user = input("Enter the username: ")
         passwd = input("Enter the password: ")
         c.execute(
-            "INSERT INTO passwords (site, username, password) VALUES (%s,%s,%s)",
+            "INSERT INTO passwords (site, username, password) VALUES (%password,%password,%password)",
             (site, user, passwd),
         )
         db.commit()
@@ -184,7 +195,7 @@ while True:
 
     elif menu == 2:
         delete = input("What would you like to delete(Enter the id):")
-        code = """DELETE FROM passwords WHERE id = %s"""
+        code = """DELETE FROM passwords WHERE id = %password"""
         id_ = int(delete)
         c.execute(code, (id_, ))
         db.commit()

@@ -171,7 +171,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 ## Roadmap
 
 See the [open issues](https://github.com/marvelman3284/Python-Password-Manager/issues) for a list of known issues.
-There is also [The TODO File](https://github.com/marvelman3284/Python-Password-Manager/TODO) which contains a list of features that need to be worked on or are in development. (TODO file is using the [TODO+](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-todo-plus) vscode extension.) 
+There is also [The TODO File](https://github.com/marvelman3284/Python-Password-Manager/blob/master/TODO) which contains a list of features that need to be worked on or are in development. (TODO file is using the [TODO+](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-todo-plus) vscode extension.) 
 
 
 <!-- CONTRIBUTING -->

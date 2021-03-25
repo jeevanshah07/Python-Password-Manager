@@ -160,8 +160,20 @@ Make a copy of `config.example.ini` and name it `config.ini`. Fill in each spot.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+### First time setup
+On first time setup you will have to create a master password that **cannot be changed**.
+<img src="images/enterpw.png">
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Next you will have to create a user to login with.
+<img src="images/enteruser.png">
+
+You will also need to provide an email that will be used for 2FA (two factor authentication)
+<img src="images/enteremail.png">
+
+Then you will setup a pass to be associated with your user.
+<img src="images/enteruserpw.png">
+
+Finally you will be directed to login (see below)
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 

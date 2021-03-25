@@ -11,6 +11,7 @@ import mail
 import server
 import totp
 
+
 key = cryptic.get_key()
 
 config = ConfigParser()
@@ -29,9 +30,9 @@ valid = False
 
 def validate(password: str):
     """
-	Credit to Sci Prog on stackoverflow for the code.
-	https://stackoverflow.com/questions/35857967/python-password-requirement-program
-	"""
+    Credit to Sci Prog on stackoverflow for the code.
+    https://stackoverflow.com/questions/35857967/python-password-requirement-program
+    """
     SPECIAL = "@$#!&*()[].,?+=-"
 
     Cap, Low, Num, Spec, Len = False, False, False, False, False
@@ -108,7 +109,7 @@ if empty is True:
     PASS = cryptic.encrypt(USERPASS, key)
 
     c.execute(
-        "INSERT INTO secrets (username, email, pass, secret) VALUES (%password, %password, %password, %password)",
+        "INSERT INTO secrets (username, email, pass, secret) VALUES (%s, %s, %s, %s)",
         (user, userEmail, PASS, secret),
     )
     db.commit()
@@ -123,7 +124,7 @@ if log == MASTERPASS:
 
     user = console.createUserMenu()
 
-    c.execute("SELECT pass FROM secrets WHERE username=%password", (user, ))
+    c.execute("SELECT pass FROM secrets WHERE username=%s", (user, ))
 
     for x in c:
         dataPass = str(x)
@@ -134,13 +135,13 @@ if log == MASTERPASS:
     loginPass = bytes(str(loginPass), 'utf8')
 
     if loginPass == dataPass:
-        c.execute("SELECT email FROM secrets WHERE username=%password",
+        c.execute("SELECT email FROM secrets WHERE username=%s",
                   (user, ))
 
         for x in c:
             dataEmail = x
 
-        c.execute("SELECT secret FROM secrets WHERE username=%password",
+        c.execute("SELECT secret FROM secrets WHERE username=%s",
                   (user, ))
 
         for y in c:
@@ -181,7 +182,7 @@ while True:
         user = input("Enter the username: ")
         passwd = input("Enter the password: ")
         c.execute(
-            "INSERT INTO passwords (site, username, password) VALUES (%password,%password,%password)",
+            "INSERT INTO passwords (site, username, password) VALUES (%s,%s,%s)",
             (site, user, passwd),
         )
         db.commit()
@@ -195,7 +196,7 @@ while True:
 
     elif menu == 2:
         delete = input("What would you like to delete(Enter the id):")
-        code = """DELETE FROM passwords WHERE id = %password"""
+        code = """DELETE FROM passwords WHERE id = %s"""
         id_ = int(delete)
         c.execute(code, (id_, ))
         db.commit()

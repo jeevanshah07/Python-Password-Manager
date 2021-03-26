@@ -11,7 +11,6 @@ import mail
 import server
 import totp
 
-
 key = cryptic.get_key()
 
 config = ConfigParser()
@@ -131,14 +130,12 @@ if log == MASTERPASS:
     loginPass = bytes(str(loginPass), 'utf8')
 
     if loginPass == dataPass:
-        c.execute("SELECT email FROM secrets WHERE username=%s",
-                  (user, ))
+        c.execute("SELECT email FROM secrets WHERE username=%s", (user, ))
 
         for x in c:
             dataEmail = x
 
-        c.execute("SELECT secret FROM secrets WHERE username=%s",
-                  (user, ))
+        c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
 
         for y in c:
             secret = str(y)

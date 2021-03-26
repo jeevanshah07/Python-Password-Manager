@@ -23,4 +23,4 @@ jobs:
         pip install flake8
     - name: Analysing the code with flake8
       run: |
-        flake8 --extend-ignore=E401, E501, W191, E101 ./src/*
+        flake8 --extend-ignore=E401, E501 ./src/*

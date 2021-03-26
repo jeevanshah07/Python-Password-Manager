@@ -69,9 +69,11 @@ def insert_master(c, user, email, password, secret):
 
 
 def delete(c, identify=None):
-    everything = Prompt.ask("Would you like to delete all entries?", choices=['yes', 'no'])
+    everything = Prompt.ask("Would you like to delete all entries?",
+                            choices=['yes', 'no'])
     if everything == 'no':
-        identify = IntPrompt("Enter the ID of the entry you would like to delete")
+        identify = IntPrompt(
+            "Enter the ID of the entry you would like to delete")
         c.execute("DELTE FROM password WHERE id=%", (identify, ))
         db.commit()
     elif everything == 'yes':

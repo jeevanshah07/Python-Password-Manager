@@ -47,7 +47,7 @@
             ☐ -https://build-system.fman.io/pyqt5-tutorial
         ☐ -Setup website
             ☐ -Use flask
-            ☐ -Learn flask @started(21-03-18 18:03)
+                ☐ -Learn flask @started(21-03-18 18:03)
             ☐ -Setup on pi using nginx
                     ☐ -https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04
 
@@ -73,3 +73,7 @@
     ☐ -Store key in DB and write "You really thought I was that stupid" in key.key"
 
 ☐ -Make everything function to allows for easy calls @started(21-03-25 08:59)
+
+☐ -Setup serverless (sqlite) @started(21-03-26 16:26)
+
+☐ -Update `Pipfile.lock`

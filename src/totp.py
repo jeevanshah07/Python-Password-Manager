@@ -18,7 +18,7 @@ def dynamic_truncation(raw_key: hmac.HMAC, length: int) -> str:
     bitstring = bin(int(raw_key.hexdigest(), base=16))
     last_four_bits = bitstring[-4:]
     offset = int(last_four_bits, base=2)
-    chosen_32_bits = bitstring[offset * 8: offset * 8 + 32]
+    chosen_32_bits = bitstring[offset * 8:offset * 8 + 32]
     full_totp = str(int(chosen_32_bits, base=2))
 
     return full_totp[-length:]

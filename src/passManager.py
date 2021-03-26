@@ -108,11 +108,7 @@ if empty is True:
 
     PASS = cryptic.encrypt(USERPASS, key)
 
-    c.execute(
-        "INSERT INTO secrets (username, email, pass, secret) VALUES (%s, %s, %s, %s)",
-        (user, userEmail, PASS, secret),
-    )
-    db.commit()
+    server.insert_master(c, user, userEmail, PASS, secret)
 
 if empty is False or MASTERPASS is not None:
     with open("data/save.pickle", "r+b") as f:
@@ -181,11 +177,7 @@ while True:
         site = input("Enter the site (include 'https://'): ")
         user = input("Enter the username: ")
         passwd = input("Enter the password: ")
-        c.execute(
-            "INSERT INTO passwords (site, username, password) VALUES (%s,%s,%s)",
-            (site, user, passwd),
-        )
-        db.commit()
+        server.insert_password(c, site, user, passwd)
         print(Fore.GREEN + "Successfully inserted data into table!" +
               Style.RESET_ALL)
 
@@ -195,11 +187,7 @@ while True:
             print(x)
 
     elif menu == 2:
-        delete = input("What would you like to delete(Enter the id):")
-        code = """DELETE FROM passwords WHERE id = %s"""
-        id_ = int(delete)
-        c.execute(code, (id_, ))
-        db.commit()
+        server.delete(c)
         print("Succesfully deleted!")
 
     elif menu == 3:

@@ -1,6 +1,7 @@
 import mysql.connector
 from configparser import ConfigParser
 from colorama import Fore, Style
+from rich.prompt import Prompt, IntPrompt
 
 config = ConfigParser()
 config.read('config.ini')
@@ -49,3 +50,30 @@ def create_tables(cursor, db):
     db.commit()
 
     print(Fore.MAGENTA + "Table secrets created!" + Style.RESET_ALL)
+
+
+def insert_password(c, site, user, passwd):
+    c.execute(
+        "INSERT INTO passwords (site, username, password) VALUES (%s,%s,%s)",
+        (site, user, passwd),
+    )
+    db.commit()
+
+
+def insert_master(c, user, email, password, secret):
+    c.execute(
+        "INSERT INTO secrets (username, email, pass, secret) VALUES (%s, %s, %s, %s)",
+        (user, email, password, secret),
+    )
+    db.commit()
+
+
+def delete(c, identify=None):
+    everything = Prompt.ask("Would you like to delete all entries?", choices=['yes', 'no'])
+    if everything == 'no':
+        identify = IntPrompt("Enter the ID of the entry you would like to delete")
+        c.execute("DELTE FROM password WHERE id=%", (identify, ))
+        db.commit()
+    elif everything == 'yes':
+        c.execute("DELETE FROM passwords")
+        db.commit()

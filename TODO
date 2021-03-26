@@ -65,9 +65,11 @@
 
 ☐ -Update README.md @started(21-03-15 20:46)
 
-☐ -Create a python files to setup the MySQL database (src/server.py) @started(21-03-16 12:27)
-    ☐ -Check if the tables are in existanse @started(21-03-18 17:57)
-        ☐ -If they are do nothing @started(21-03-18 20:19)
-        ☐ -If they aren't create then @started(21-03-18 20:19)
+✔ -Create a python files to setup the MySQL database (src/server.py) @started(21-03-16 12:27) @done(21-03-25 08:59) @lasted(1w1d20h32m31s)
+    ✔ -Check if the tables are in existanse @started(21-03-18 17:57) @done(21-03-25 08:59) @lasted(6d15h2m32s)
+        ✔ -If they are do nothing @started(21-03-18 20:19) @done(21-03-25 08:59) @lasted(6d12h40m33s)
+        ✔ -If they aren't create then @started(21-03-18 20:19) @done(21-03-25 08:59) @lasted(6d12h40m33s)
 
     ☐ -Store key in DB and write "You really thought I was that stupid" in key.key"
+
+☐ -Make everything function to allows for easy calls @started(21-03-25 08:59)

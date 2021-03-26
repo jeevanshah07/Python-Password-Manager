@@ -20,6 +20,3 @@ def createUserMenu():
         users.append(i)
 
     return createMenu(users)
-
-
-createUserMenu()

@@ -75,5 +75,6 @@
 ☐ -Make everything function to allows for easy calls @started(21-03-25 08:59)
 
 ☐ -Setup serverless (sqlite) @started(21-03-26 16:26)
+    ☐ -https://stackoverflow.com/questions/32372353/how-to-create-a-db-file-in-sqlite3-using-a-schema-file-from-within-python
 
 ☐ -Update `Pipfile.lock`

@@ -1,55 +1,67 @@
 import mysql.connector
-from configparser import ConfigParser
 from colorama import Fore, Style
 from rich.prompt import Prompt, IntPrompt
+from configparser import ConfigParser
+import args
+import sqlite3
+
 
 config = ConfigParser()
-config.read('config.ini')
 
 host = config.get("MySQL", "Host")
 user = config.get("MySQL", "User")
 password = config.get("MySQL", "Password")
 database = config.get("MySQL", "Database")
+liteDB = config.get("sqlite3", "Databse")
 
 
-def connect(host, user, password, databse):
-    db = mysql.connector.connect(host=host,
-                                 user=user,
-                                 passwd=password,
-                                 db=database)
+def connect(databse, host=None, user=None, password=None):
 
-    return db
+    def mysql_connect(host, user, password, databse):
+        db = mysql.connector.connect(host=host,
+                                     user=user,
+                                     passwd=password,
+                                     db=database)
+
+        return db
+
+    def sqlite_connect(databse):
+        c = sqlite3.connect(liteDB)
+        return c
 
 
-db = connect(host, user, password, database)
-c = db.cursor()
-
-
+# TODO: Change this into a class and define a cursor in that class
 def create_tables(cursor, db):
 
-    cursor.execute("""CREATE TABLE IF NOT EXISTS passwords (
-                                        site VARCHAR(500) NOT NULL,
-                                        username VARCHAR(500) NOT NULL,
-                                        password VARCHAR(500) NOT NULL,
-                                        id int PRIMARY KEY AUTO_INCREMENT
-                                        )""")
+    def create_pw(cursor, db):
+        cursor.execute("""CREATE TABLE IF NOT EXISTS passwords (
+                                            site VARCHAR(500) NOT NULL,
+                                            username VARCHAR(500) NOT NULL,
+                                            password VARCHAR(500) NOT NULL,
+                                            id int PRIMARY KEY AUTO_INCREMENT
+                                            )""")
 
-    db.commit()
+        db.commit()
 
-    print(Fore.MAGENTA + "Table passwords created!" + Style.RESET_ALL)
+        print(Fore.MAGENTA + "Table passwords created!" + Style.RESET_ALL)
 
-    cursor.execute("""CREATE TABLE IF NOT EXISTS secrets (
-                                        username VARCHAR(500) NOT NULL,
-                                        email VARCHAR(100) NOT NULL,
-                                        secret VARCHAR(500) NOT NULL,
-                                        pass VARCHAR(500) NOT NULL,
-                                        `key` VARCHAR(500),
-                                        id int PRIMARY KEY AUTO_INCREMENT
-                                        )""")
+    def create_secrets(cursor, db):
+        cursor.execute("""CREATE TABLE IF NOT EXISTS secrets (
+                                            username VARCHAR(500) NOT NULL,
+                                            email VARCHAR(100) NOT NULL,
+                                            secret VARCHAR(500) NOT NULL,
+                                            pass VARCHAR(500) NOT NULL,
+                                            `key` VARCHAR(500),
+                                            id int PRIMARY KEY AUTO_INCREMENT
+                                            )""")
 
-    db.commit()
+        db.commit()
 
-    print(Fore.MAGENTA + "Table secrets created!" + Style.RESET_ALL)
+        print(Fore.MAGENTA + "Table secrets created!" + Style.RESET_ALL)
+
+
+    create_pw(cursor, db)
+    create_secrets(cursor, db)
 
 
 def insert_password(c, site, user, passwd):

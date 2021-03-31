@@ -19,7 +19,12 @@ config.read('config.ini')
 email = config.get("Email", "Email")
 emailPass = config.get("Email", "Password")
 
-db = server.db
+host = config.get("MySQL", "Host")
+user = config.get("MySQL", "User")
+password = config.get("MySQL", "Password")
+database = config.get("MySQL", "Database")
+
+db = server.connect(host, user, password, databse)
 c = db.cursor()
 MASTERPASS = ""
 USERPASS = ""
@@ -36,7 +41,7 @@ def validate(password: str):
 
     Cap, Low, Num, Spec, Len = False, False, False, False, False
     for i in password:
-        if i.isupper():
+            if i.isupper():
             Cap = True
         elif i.islower():
             Low = True

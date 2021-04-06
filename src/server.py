@@ -15,23 +15,28 @@ database = config.get("MySQL", "Database")
 liteDB = config.get("sqlite3", "Databse")
 
 
-def connect(databse, host=None, user=None, password=None):
+def mysql_connect(host, user, password, databse):
+    db = mysql.connector.connect(host=host,
+                                 user=user,
+                                 passwd=password,
+                                 db=database)
 
-    def mysql_connect(host, user, password, databse):
-        db = mysql.connector.connect(host=host,
-                                     user=user,
-                                     passwd=password,
-                                     db=database)
-
-        return db
-
-    def sqlite_connect(databse):
-        c = sqlite3.connect(liteDB)
-        return c
+    return db
 
 
-# TODO: Change this into a class and define a cursor in that class
-def create_tables(cursor, db):
+def sqlite_connect(database):
+    c = sqlite3.connect(database)
+    return c
+
+
+def create_tables():
+
+    if not args.sql:
+        c = sqlite_connect(liteDB)
+
+    elif args.sql:
+        db = mysql_connect(database, host, user, password)
+        c = db.cursor()
 
     def create_pw(cursor, db):
         cursor.execute("""CREATE TABLE IF NOT EXISTS passwords (

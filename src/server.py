@@ -5,14 +5,15 @@ from configparser import ConfigParser
 import args
 import sqlite3
 
-
 config = ConfigParser()
+
+config.read('config.ini')
 
 host = config.get("MySQL", "Host")
 user = config.get("MySQL", "User")
 password = config.get("MySQL", "Password")
 database = config.get("MySQL", "Database")
-liteDB = config.get("sqlite3", "Databse")
+liteDB = config.get("sqlite3", "Database")
 
 
 def mysql_connect(host, user, password, databse):
@@ -29,14 +30,14 @@ def sqlite_connect(database):
     return c
 
 
-def create_tables():
+def create_tables(host, user, password, database):
 
     if not args.sql:
-        c = sqlite_connect(liteDB)
+        cursor = sqlite_connect(liteDB)
 
     elif args.sql:
         db = mysql_connect(database, host, user, password)
-        c = db.cursor()
+        cursor = db.cursor()
 
     def create_pw(cursor, db):
         cursor.execute("""CREATE TABLE IF NOT EXISTS passwords (
@@ -64,12 +65,13 @@ def create_tables():
 
         print(Fore.MAGENTA + "Table secrets created!" + Style.RESET_ALL)
 
-
     create_pw(cursor, db)
     create_secrets(cursor, db)
 
+    return cursor, db
 
-def insert_password(c, site, user, passwd):
+
+def insert_password(c, site, user, passwd, db):
     c.execute(
         "INSERT INTO passwords (site, username, password) VALUES (%s,%s,%s)",
         (site, user, passwd),
@@ -77,7 +79,7 @@ def insert_password(c, site, user, passwd):
     db.commit()
 
 
-def insert_master(c, user, email, password, secret):
+def insert_master(c, user, email, password, secret, db):
     c.execute(
         "INSERT INTO secrets (username, email, pass, secret) VALUES (%s, %s, %s, %s)",
         (user, email, password, secret),
@@ -85,7 +87,7 @@ def insert_master(c, user, email, password, secret):
     db.commit()
 
 
-def delete(c, identify=None):
+def delete(c, db, identify=None):
     everything = Prompt.ask("Would you like to delete all entries?",
                             choices=['yes', 'no'])
     if everything == 'no':
@@ -96,3 +98,6 @@ def delete(c, identify=None):
     elif everything == 'yes':
         c.execute("DELETE FROM passwords")
         db.commit()
+
+
+c, db = create_tables(host, user, password, database)

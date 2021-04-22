@@ -1,18 +1,20 @@
 import logging
-import sys
 
-FORMAT = '%(asctime)s:%(levelname)s:%(filename)s:%(lineno)d:%(funcName)s:%(message)s'
+logs = logging.getLogger(__name__)
+logs.setLevel(logging.DEBUG)
 
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-logging.basicConfig(format=FORMAT)
+stream = logging.StreamHandler()
+stream.setLevel(logging.DEBUG)
+streamformat = logging.Formatter("%(asctime)s:%(levelname)s:%(message)s")
+stream.setFormatter(streamformat)
 
-output_file_handler = logging.FileHandler("logs/log.log")
-stdout_handler = logging.StreamHandler(sys.stdout)
+logs.addHandler(stream)
 
-logger.addHandler(output_file_handler)
-logger.addHandler(stdout_handler)
+fileHandler = logging.FileHandler("logs/logs.log")
+fileHandler.setLevel(logging.DEBUG)
+fileformat = logging.Formatter("%(asctime)s:%(levelname)s:%(message)s",datefmt="%H:%M:%S")
+fileHandler.setFormatter(fileformat)
 
+logs.addHandler(fileHandler)
 
-def log_debug(message: str):
-    return logger.debug(message)
+logs.debug('Hello Wolrd')

@@ -172,8 +172,10 @@ else:
     exit()
 
 while True:
-    menu = console.createMenu(
-        ['Add information', 'Get information', 'Delete information', 'Create User', 'Delete User'])
+    menu = console.createMenu([
+        'Add information', 'Get information', 'Delete information',
+        'Create User', 'Delete User'
+    ])
 
     if menu == 0:
         site = input("Enter the site (include 'https://'): ")
@@ -181,7 +183,7 @@ while True:
         passwd = input("Enter the password: ")
         server.insert_password(c, site, user, passwd)
         logger.info(Fore.GREEN + "Successfully inserted data into table!" +
-              Style.RESET_ALL)
+                    Style.RESET_ALL)
 
     elif menu == 1:
         c.execute("SELECT * FROM passwords")

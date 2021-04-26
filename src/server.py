@@ -2,6 +2,9 @@ import mysql.connector
 from configparser import ConfigParser
 from colorama import Fore, Style
 from rich.prompt import Prompt, IntPrompt
+import logs
+
+logger = logs.logger
 
 config = ConfigParser()
 config.read('config.ini')
@@ -38,6 +41,8 @@ def create_tables(cursor, db):
 
     print(Fore.MAGENTA + "Table passwords created!" + Style.RESET_ALL)
 
+    logger.info("Passwords Table created")
+
     cursor.execute("""CREATE TABLE IF NOT EXISTS secrets (
                                         username VARCHAR(500) NOT NULL,
                                         email VARCHAR(100) NOT NULL,
@@ -49,7 +54,7 @@ def create_tables(cursor, db):
 
     db.commit()
 
-    print(Fore.MAGENTA + "Table secrets created!" + Style.RESET_ALL)
+    logger.info(Fore.MAGENTA + "Table secrets created!" + Style.RESET_ALL)
 
 
 def insert_password(c, site, user, passwd):

@@ -10,8 +10,11 @@ import encrypt as cryptic
 import mail
 import server
 import totp
+import logs
 
 key = cryptic.get_key()
+
+logger = logs.logger
 
 config = ConfigParser()
 config.read('config.ini')
@@ -74,7 +77,7 @@ if empty is True:
 
         elif validate(MASTERPASS) is False:
             while True:
-                print(
+                logger.warn(
                     Fore.RED +
                     "\nTry Again! Make sure your password is at least 8 charaters long and contaions 1 lowercase, 1 uppercase, 1 number, and 1 special character. \n"
                     + Style.RESET_ALL)
@@ -91,12 +94,12 @@ if empty is True:
                     break
 
                 else:
-                    print(
+                    logger.warn(
                         Fore.RED +
                         "\nTry Again! Make sure your password is at least 8 charaters long and contaions 1 lowercase, 1 uppercase, 1 number, and 1 special character. \n"
                         + Style.RESET_ALL)
 
-    print("Welcome to user setup.")
+    logger.info(Fore.GREEN + "Welcome to user setup." + Style.RESET_ALL)
     user = input("Please enter the username you would like to login as:")
     userEmail = input("Please enter your email: ")
     USERPASS = input(
@@ -148,45 +151,49 @@ if log == MASTERPASS:
             validation = totp.validate_totp(enterTotp, secret)
 
             if validate:
-                print("Your code is valid, proceed on!")
+                logger.info(Fore.LIGHTYELLOW_EX +
+                            "Your code is valid, proceed on!" +
+                            Style.RESET_ALL)
 
             else:
-                print(Fore.RED + "Invalid Code!" + Style.RESET_ALL)
+                logger.critical(Fore.RED + "Invalid Code!" + Style.RESET_ALL)
                 exit()
 
         else:
-            print(Fore.RED + "Wrong Code!" + Style.RESET_ALL)
+            logger.critical(Fore.RED + "Wrong Code!" + Style.RESET_ALL)
             exit()
 
     else:
-        print(Fore.RED + "Wrong Password!" + Style.RESET_ALL)
+        logger.critical(Fore.RED + "Wrong Password!" + Style.RESET_ALL)
         exit()
 
 else:
-    print(Fore.RED + "Wrong Master Password!" + Style.RESET_ALL)
+    logger.critical(Fore.RED + "Wrong Master Password!" + Style.RESET_ALL)
     exit()
 
 while True:
-    menu = console.createMenu(
-        ['Add information', 'Get information', 'Delete information'])
+    menu = console.createMenu([
+        'Add information', 'Get information', 'Delete information',
+        'Create User', 'Delete User'
+    ])
 
     if menu == 0:
         site = input("Enter the site (include 'https://'): ")
         user = input("Enter the username: ")
         passwd = input("Enter the password: ")
         server.insert_password(c, site, user, passwd)
-        print(Fore.GREEN + "Successfully inserted data into table!" +
-              Style.RESET_ALL)
+        logger.info(Fore.GREEN + "Successfully inserted data into table!" +
+                    Style.RESET_ALL)
 
     elif menu == 1:
         c.execute("SELECT * FROM passwords")
         for x in c:
-            print(x)
+            logger.info(x)
 
     elif menu == 2:
         server.delete(c)
-        print("Succesfully deleted!")
+        logger.warn("Succesfully deleted!")
 
     elif menu == 3:
-        print(Fore.LIGHTMAGENTA_EX + "Bye!")
+        logger.info(Fore.LIGHTMAGENTA_EX + "Bye!")
         exit()

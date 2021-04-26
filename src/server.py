@@ -1,10 +1,16 @@
 import mysql.connector
 from colorama import Fore, Style
 from rich.prompt import Prompt, IntPrompt
+<<<<<<< HEAD
 from configparser import ConfigParser
 import args
 import sqlite3
 
+=======
+import logs
+
+logger = logs.logger
+>>>>>>> a5eeb747ff72fd0285948bd38544bc948ff29575
 
 config = ConfigParser()
 
@@ -45,6 +51,7 @@ def create_tables(cursor, db):
 
         print(Fore.MAGENTA + "Table passwords created!" + Style.RESET_ALL)
 
+<<<<<<< HEAD
     def create_secrets(cursor, db):
         cursor.execute("""CREATE TABLE IF NOT EXISTS secrets (
                                             username VARCHAR(500) NOT NULL,
@@ -58,10 +65,26 @@ def create_tables(cursor, db):
         db.commit()
 
         print(Fore.MAGENTA + "Table secrets created!" + Style.RESET_ALL)
+=======
+    logger.info("Passwords Table created")
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS secrets (
+                                        username VARCHAR(500) NOT NULL,
+                                        email VARCHAR(100) NOT NULL,
+                                        secret VARCHAR(500) NOT NULL,
+                                        pass VARCHAR(500) NOT NULL,
+                                        `key` VARCHAR(500),
+                                        id int PRIMARY KEY AUTO_INCREMENT
+                                        )""")
+>>>>>>> a5eeb747ff72fd0285948bd38544bc948ff29575
 
 
+<<<<<<< HEAD
     create_pw(cursor, db)
     create_secrets(cursor, db)
+=======
+    logger.info(Fore.MAGENTA + "Table secrets created!" + Style.RESET_ALL)
+>>>>>>> a5eeb747ff72fd0285948bd38544bc948ff29575
 
 
 def insert_password(c, site, user, passwd):

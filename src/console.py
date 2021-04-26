@@ -17,6 +17,8 @@ def createUserMenu():
         i = str(i).replace("(", "")
         i = i.replace(")", "")
         i = i.replace(",", "")
+        i = i.replace("'", "")
         users.append(i)
 
-    return createMenu(users)
+    user = createMenu(users)
+    return str(users[user])

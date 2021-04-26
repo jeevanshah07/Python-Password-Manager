@@ -4,13 +4,14 @@ from configparser import ConfigParser
 from getpass import getpass
 
 from colorama import Fore, Style
-
+from time import sleep
 import console
 import encrypt as cryptic
 import mail
 import server
 import totp
 import logs
+from rich.prompt import IntPrompt
 
 key = cryptic.get_key()
 
@@ -126,7 +127,7 @@ log = getpass("Master Password:")
 if log == MASTERPASS:
 
     user = console.createUserMenu()
-
+    print(user)
     c.execute("SELECT pass FROM secrets WHERE username=%s", (user, ))
 
     for x in c:
@@ -179,7 +180,7 @@ else:
 while True:
     menu = console.createMenu([
         'Add information', 'Get information', 'Delete information',
-        'Create User', 'Delete User'
+        'Delete User'
     ])
 
     if menu == 0:
@@ -202,3 +203,28 @@ while True:
     elif menu == 3:
         logger.info(Fore.LIGHTMAGENTA_EX + "Bye!")
         exit()
+
+    elif menu == 4:
+        c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
+        for y in c:
+            secret = str(y)
+
+        c.execute("SELECT email FROM secrets WHERE username=%s", (user, ))
+
+        for x in c:
+            dataEmail = x
+
+        mail.send_secret(email, dataEmail, emailPass, tbotp)
+
+        enterTotp = IntPrompt(
+            "Please enter the code that was emailed to you for verifaction:")
+
+        validation = totp.validate_totp(enterTotp, secret)
+
+        if validation:
+            logger.info(Fore.LIGHTYELLOW_EX +
+                        "Your code is valid, proceed on!" + Style.RESET_ALL)
+
+            logger.info("Select which user you would like to delete.")
+            sleep(1.25)
+            console.createUserMenu()

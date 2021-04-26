@@ -27,7 +27,7 @@ user = config.get("MySQL", "User")
 password = config.get("MySQL", "Password")
 database = config.get("MySQL", "Database")
 
-db = server.connect(host, user, password, databse)
+db = server.connect(host, user, password, database)
 c = db.cursor()
 MASTERPASS = ""
 USERPASS = ""

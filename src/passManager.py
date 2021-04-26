@@ -44,7 +44,7 @@ def validate(password: str):
 
     Cap, Low, Num, Spec, Len = False, False, False, False, False
     for i in password:
-            if i.isupper():
+        if i.isupper():
             Cap = True
         elif i.islower():
             Low = True

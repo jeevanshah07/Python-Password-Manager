@@ -11,7 +11,7 @@ import mail
 import server
 import totp
 import logs
-from rich.prompt import IntPrompt
+from rich.prompt import IntPrompt, Confirm
 
 key = cryptic.get_key()
 
@@ -105,18 +105,7 @@ if empty is True:
                         "\nTry Again! Make sure your password is at least 8 charaters long and contaions 1 lowercase, 1 uppercase, 1 number, and 1 special character. \n"
                         + Style.RESET_ALL)
 
-    logger.info(Fore.GREEN + "Welcome to user setup." + Style.RESET_ALL)
-    user = input("Please enter the username you would like to login as:")
-    userEmail = input("Please enter your email: ")
-    USERPASS = input(
-        "Please enter the password you would like to login with: ")
-    mail.send_test(email, userEmail, emailPass)
-
-    secret = totp.generate_shared_secret()
-
-    PASS = cryptic.encrypt(USERPASS, key)
-
-    server.insert_master(c, user, userEmail, PASS, secret)
+    server.create_user(c, db)
 
 if empty is False or MASTERPASS is not None:
     with open("data/save.pickle", "r+b") as f:
@@ -127,7 +116,10 @@ log = getpass("Master Password:")
 if log == MASTERPASS:
 
     user = console.createUserMenu()
-    print(user)
+
+    if user == 'Add Users':
+       user = server.create_user(c, db)
+    
     c.execute("SELECT pass FROM secrets WHERE username=%s", (user, ))
 
     for x in c:
@@ -226,5 +218,13 @@ while True:
                         "Your code is valid, proceed on!" + Style.RESET_ALL)
 
             logger.info("Select which user you would like to delete.")
+            
             sleep(1.25)
-            console.createUserMenu()
+            
+            delUser = console.createUserMenu()
+            confirm = Confirm.ask(f'Are you sure you want to delete user {delUser}?')
+
+            log = getpass("Master Password:")
+            
+            if log == MASTERPASS:
+                server.delete_user(cursor=c, user=delUser)

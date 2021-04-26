@@ -1,11 +1,15 @@
+from getpass import getpass
 import mysql.connector
 from configparser import ConfigParser
 from colorama import Fore, Style
 from rich.prompt import Prompt, IntPrompt
 import logs
+import mail
+import totp
+import encrypt as cryptic
 
 logger = logs.logger
-
+key = cryptic.get_key()
 config = ConfigParser()
 config.read('config.ini')
 
@@ -14,8 +18,11 @@ user = config.get("MySQL", "User")
 password = config.get("MySQL", "Password")
 database = config.get("MySQL", "Database")
 
+email = config.get("Email", "Email")
+emailPass = config.get("Email", "Password")
 
-def connect(host, user, password, databse):
+
+def connect(host, user, password, database):
     db = mysql.connector.connect(host=host,
                                  user=user,
                                  passwd=password,
@@ -29,20 +36,6 @@ c = db.cursor()
 
 
 def create_tables(cursor, db):
-
-    cursor.execute("""CREATE TABLE IF NOT EXISTS passwords (
-                                        site VARCHAR(500) NOT NULL,
-                                        username VARCHAR(500) NOT NULL,
-                                        password VARCHAR(500) NOT NULL,
-                                        id int PRIMARY KEY AUTO_INCREMENT
-                                        )""")
-
-    db.commit()
-
-    print(Fore.MAGENTA + "Table passwords created!" + Style.RESET_ALL)
-
-    logger.info("Passwords Table created")
-
     cursor.execute("""CREATE TABLE IF NOT EXISTS secrets (
                                         username VARCHAR(500) NOT NULL,
                                         email VARCHAR(100) NOT NULL,
@@ -56,31 +49,76 @@ def create_tables(cursor, db):
 
     logger.info(Fore.MAGENTA + "Table secrets created!" + Style.RESET_ALL)
 
+def create_user_table(cursor, db, user):
+    cursor.execute("""CREATE TABLE IF NOT EXISTS """ + user + """ (
+                                        site VARCHAR(500) NOT NULL,
+                                        username VARCHAR(500) NOT NULL,
+                                        password VARCHAR(500) NOT NULL,
+                                        id int PRIMARY KEY AUTO_INCREMENT
+                                        )""")
 
-def insert_password(c, site, user, passwd):
-    c.execute(
+    db.commit()
+
+    print(Fore.MAGENTA + "Table passwords created!" + Style.RESET_ALL)
+
+    logger.info("Passwords Table created")
+
+def insert_password(cursor, site, user, passwd):
+    cursor.execute(
         "INSERT INTO passwords (site, username, password) VALUES (%s,%s,%s)",
         (site, user, passwd),
     )
     db.commit()
 
 
-def insert_master(c, user, email, password, secret):
-    c.execute(
+def insert_master(cursor, user, email, password, secret):
+    cursor.execute(
         "INSERT INTO secrets (username, email, pass, secret) VALUES (%s, %s, %s, %s)",
         (user, email, password, secret),
     )
     db.commit()
 
 
-def delete(c, identify=None):
+def delete(cursor):
     everything = Prompt.ask("Would you like to delete all entries?",
                             choices=['yes', 'no'])
     if everything == 'no':
         identify = IntPrompt(
             "Enter the ID of the entry you would like to delete")
-        c.execute("DELTE FROM password WHERE id=%", (identify, ))
+        cursor.execute("DELETE FROM password WHERE id=%", (identify, ))
         db.commit()
     elif everything == 'yes':
-        c.execute("DELETE FROM passwords")
+        cursor.execute("DELETE FROM passwords")
         db.commit()
+
+
+def create_user(cursor, db):
+    logger.info(Fore.GREEN + "Welcome to user setup." + Style.RESET_ALL)
+
+    user = input("Please enter the username you would like to login as:")
+
+    print(user)
+    userEmail = input("Please enter your email: ")
+
+    USERPASS = getpass(
+        "Please enter the password you would like to login with: ")
+
+    mail.send_test(email, userEmail, emailPass)
+
+    secret = totp.generate_shared_secret()
+
+    PASS = cryptic.encrypt(USERPASS, key)
+
+    insert_master(cursor, user, userEmail, PASS, secret)
+    create_user_table(cursor, db, user) 
+
+    db.commit()
+
+    return user
+
+def delete_user(cursor, user):
+    # TODO: insert variable names in sql statement
+    cursor.execute("DELETE FROM secrets WHERE username=%", (user, ))
+    cursor.execute("DROP TABLE %s", (user, ))
+
+    logger.warn(Fore.RED + f"Deleted User {user}" + Style.RESET_ALL)

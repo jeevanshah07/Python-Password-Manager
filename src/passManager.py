@@ -118,8 +118,8 @@ if log == MASTERPASS:
     user = console.createUserMenu()
 
     if user == 'Add Users':
-       user = server.create_user(c, db)
-    
+        user = server.create_user(c, db)
+
     c.execute("SELECT pass FROM secrets WHERE username=%s", (user, ))
 
     for x in c:
@@ -193,10 +193,7 @@ while True:
         logger.warn("Succesfully deleted!")
 
     elif menu == 3:
-        logger.info(Fore.LIGHTMAGENTA_EX + "Bye!")
-        exit()
-
-    elif menu == 4:
+        logger.debug('menu option 4 - delete user')
         c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
         for y in c:
             secret = str(y)
@@ -208,7 +205,7 @@ while True:
 
         mail.send_secret(email, dataEmail, emailPass, tbotp)
 
-        enterTotp = IntPrompt(
+        enterTotp = input(
             "Please enter the code that was emailed to you for verifaction:")
 
         validation = totp.validate_totp(enterTotp, secret)
@@ -218,13 +215,18 @@ while True:
                         "Your code is valid, proceed on!" + Style.RESET_ALL)
 
             logger.info("Select which user you would like to delete.")
-            
+
             sleep(1.25)
-            
+
             delUser = console.createUserMenu()
-            confirm = Confirm.ask(f'Are you sure you want to delete user {delUser}?')
+            confirm = Confirm.ask(
+                f'Are you sure you want to delete user {delUser}?')
 
             log = getpass("Master Password:")
-            
+
             if log == MASTERPASS:
                 server.delete_user(cursor=c, user=delUser)
+
+    elif menu == 4:
+        logger.info(Fore.LIGHTMAGENTA_EX + "Bye!")
+        exit()

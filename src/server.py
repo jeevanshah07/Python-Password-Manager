@@ -49,6 +49,7 @@ def create_tables(cursor, db):
 
     logger.info(Fore.MAGENTA + "Table secrets created!" + Style.RESET_ALL)
 
+
 def create_user_table(cursor, db, user):
     cursor.execute("""CREATE TABLE IF NOT EXISTS """ + user + """ (
                                         site VARCHAR(500) NOT NULL,
@@ -62,6 +63,7 @@ def create_user_table(cursor, db, user):
     print(Fore.MAGENTA + "Table passwords created!" + Style.RESET_ALL)
 
     logger.info("Passwords Table created")
+
 
 def insert_password(cursor, site, user, passwd):
     cursor.execute(
@@ -80,10 +82,11 @@ def insert_master(cursor, user, email, password, secret):
 
 
 def delete(cursor):
+    # TODO: change to use a menu which lists all passwords, then have the user choose from those 
     everything = Prompt.ask("Would you like to delete all entries?",
                             choices=['yes', 'no'])
     if everything == 'no':
-        identify = IntPrompt(
+        identify = input(
             "Enter the ID of the entry you would like to delete")
         cursor.execute("DELETE FROM password WHERE id=%", (identify, ))
         db.commit()
@@ -110,11 +113,12 @@ def create_user(cursor, db):
     PASS = cryptic.encrypt(USERPASS, key)
 
     insert_master(cursor, user, userEmail, PASS, secret)
-    create_user_table(cursor, db, user) 
+    create_user_table(cursor, db, user)
 
     db.commit()
 
     return user
+
 
 def delete_user(cursor, user):
     # TODO: insert variable names in sql statement

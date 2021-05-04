@@ -1,16 +1,17 @@
 import os
+from time import sleep
 import pickle
 from configparser import ConfigParser
 from getpass import getpass
 
 from colorama import Fore, Style
-
 import console
 import encrypt as cryptic
 import mail
 import server
 import totp
 import logs
+from rich.prompt import Confirm
 
 key = cryptic.get_key()
 
@@ -104,18 +105,7 @@ if empty is True:
                         "\nTry Again! Make sure your password is at least 8 charaters long and contaions 1 lowercase, 1 uppercase, 1 number, and 1 special character. \n"
                         + Style.RESET_ALL)
 
-    logger.info(Fore.GREEN + "Welcome to user setup." + Style.RESET_ALL)
-    user = input("Please enter the username you would like to login as:")
-    userEmail = input("Please enter your email: ")
-    USERPASS = input(
-        "Please enter the password you would like to login with: ")
-    mail.send_test(email, userEmail, emailPass)
-
-    secret = totp.generate_shared_secret()
-
-    PASS = cryptic.encrypt(USERPASS, key)
-
-    server.insert_master(c, user, userEmail, PASS, secret)
+    server.create_user(c, db)
 
 if empty is False or MASTERPASS is not None:
     with open("data/save.pickle", "r+b") as f:
@@ -126,6 +116,9 @@ log = getpass("Master Password:")
 if log == MASTERPASS:
 
     user = console.createUserMenu()
+
+    if user == 'Add Users':
+        user = server.create_user(c, db)
 
     c.execute("SELECT pass FROM secrets WHERE username=%s", (user, ))
 
@@ -179,7 +172,7 @@ else:
 while True:
     menu = console.createMenu([
         'Add information', 'Get information', 'Delete information',
-        'Create User', 'Delete User'
+        'Delete User'
     ])
 
     if menu == 0:
@@ -200,5 +193,37 @@ while True:
         logger.warn("Succesfully deleted!")
 
     elif menu == 3:
+        logger.debug('menu option 4 - delete user')
+        # c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
+        # for y in c:
+        #     secret = str(y)
+
+        # c.execute("SELECT email FROM secrets WHERE username=%s", (user, ))
+
+        # for x in c:
+        #     dataEmail = x
+
+        tbotp = totp.generate_totp(secret)
+        mail.send_secret(email, dataEmail, emailPass, tbotp)
+
+        enterTotp = input(
+            "Please enter the code that was emailed to you for verifaction:")
+
+        validation = totp.validate_totp(enterTotp, secret)
+
+        if validation:
+            logger.info(Fore.LIGHTYELLOW_EX +
+                        "Your code is valid, proceed on!" + Style.RESET_ALL)
+
+        delUser = console.createUserMenu()
+        confirm = Confirm.ask(
+            f'Are you sure you want to delete user {delUser}?')
+
+        log = getpass("Master Password:")
+
+        if log == MASTERPASS:
+            server.delete_user(cursor=c, db=db, user=delUser)
+        sleep(1)
+    elif menu == 4:
         logger.info(Fore.LIGHTMAGENTA_EX + "Bye!")
         exit()

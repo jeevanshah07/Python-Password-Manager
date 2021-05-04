@@ -9,7 +9,7 @@ def createMenu(options: list):
 
 
 def createUserMenu():
-    users = []
+    users = ['Add Users']
     c = server.db.cursor()
     c.execute("SELECT username FROM secrets")
 
@@ -17,6 +17,8 @@ def createUserMenu():
         i = str(i).replace("(", "")
         i = i.replace(")", "")
         i = i.replace(",", "")
+        i = i.replace("'", "")
         users.append(i)
 
-    return createMenu(users)
+    user = createMenu(users)
+    return str(users[user])

@@ -2,7 +2,7 @@ from getpass import getpass
 import mysql.connector
 from configparser import ConfigParser
 from colorama import Fore, Style
-from rich.prompt import Prompt, IntPrompt
+from rich.prompt import Prompt
 import logs
 import mail
 import totp
@@ -82,12 +82,11 @@ def insert_master(cursor, user, email, password, secret):
 
 
 def delete(cursor):
-    # TODO: change to use a menu which lists all passwords, then have the user choose from those 
+    # TODO: change to use a menu which lists all passwords, then have the user choose from those
     everything = Prompt.ask("Would you like to delete all entries?",
                             choices=['yes', 'no'])
     if everything == 'no':
-        identify = input(
-            "Enter the ID of the entry you would like to delete")
+        identify = input("Enter the ID of the entry you would like to delete")
         cursor.execute("DELETE FROM password WHERE id=%", (identify, ))
         db.commit()
     elif everything == 'yes':
@@ -120,9 +119,13 @@ def create_user(cursor, db):
     return user
 
 
-def delete_user(cursor, user):
+def delete_user(cursor, db, user):
     # TODO: insert variable names in sql statement
-    cursor.execute("DELETE FROM secrets WHERE username=%", (user, ))
-    cursor.execute("DROP TABLE %s", (user, ))
+    logger.debug(user)
+    cursor.execute("DELETE FROM secrets WHERE username=%s", (user, ))
+    db.commit()
+    # del_table_sql = f"DROP TABLE {user}"
+    # cursor.execute(del_table_sql)
 
+    db.commit()
     logger.warn(Fore.RED + f"Deleted User {user}" + Style.RESET_ALL)

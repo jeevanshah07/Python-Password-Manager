@@ -1,17 +1,17 @@
 import os
+from time import sleep
 import pickle
 from configparser import ConfigParser
 from getpass import getpass
 
 from colorama import Fore, Style
-from time import sleep
 import console
 import encrypt as cryptic
 import mail
 import server
 import totp
 import logs
-from rich.prompt import IntPrompt, Confirm
+from rich.prompt import Confirm
 
 key = cryptic.get_key()
 
@@ -194,22 +194,23 @@ while True:
 
     elif menu == 3:
         logger.debug('menu option 4 - delete user')
-        c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
-        for y in c:
-            secret = str(y)
+        # c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
+        # for y in c:
+        #     secret = str(y)
 
-        c.execute("SELECT email FROM secrets WHERE username=%s", (user, ))
+        # c.execute("SELECT email FROM secrets WHERE username=%s", (user, ))
 
-        for x in c:
-            dataEmail = x
+        # for x in c:
+        #     dataEmail = x
 
+        tbotp = totp.generate_totp(secret)
         mail.send_secret(email, dataEmail, emailPass, tbotp)
 
         enterTotp = input(
             "Please enter the code that was emailed to you for verifaction:")
 
         validation = totp.validate_totp(enterTotp, secret)
-
+        """
         if validation:
             logger.info(Fore.LIGHTYELLOW_EX +
                         "Your code is valid, proceed on!" + Style.RESET_ALL)
@@ -217,16 +218,17 @@ while True:
             logger.info("Select which user you would like to delete.")
 
             sleep(1.25)
+        """
 
-            delUser = console.createUserMenu()
-            confirm = Confirm.ask(
-                f'Are you sure you want to delete user {delUser}?')
+        delUser = console.createUserMenu()
+        confirm = Confirm.ask(
+            f'Are you sure you want to delete user {delUser}?')
 
-            log = getpass("Master Password:")
+        log = getpass("Master Password:")
 
-            if log == MASTERPASS:
-                server.delete_user(cursor=c, user=delUser)
-
+        #if log == MASTERPASS:
+        server.delete_user(cursor=c, db=db, user=delUser)
+        sleep(1)
     elif menu == 4:
         logger.info(Fore.LIGHTMAGENTA_EX + "Bye!")
         exit()

@@ -210,15 +210,10 @@ while True:
             "Please enter the code that was emailed to you for verifaction:")
 
         validation = totp.validate_totp(enterTotp, secret)
-        """
+
         if validation:
             logger.info(Fore.LIGHTYELLOW_EX +
                         "Your code is valid, proceed on!" + Style.RESET_ALL)
-
-            logger.info("Select which user you would like to delete.")
-
-            sleep(1.25)
-        """
 
         delUser = console.createUserMenu()
         confirm = Confirm.ask(
@@ -226,8 +221,8 @@ while True:
 
         log = getpass("Master Password:")
 
-        #if log == MASTERPASS:
-        server.delete_user(cursor=c, db=db, user=delUser)
+        if log == MASTERPASS:
+            server.delete_user(cursor=c, db=db, user=delUser)
         sleep(1)
     elif menu == 4:
         logger.info(Fore.LIGHTMAGENTA_EX + "Bye!")

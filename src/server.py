@@ -7,6 +7,7 @@ import logs
 import mail
 import totp
 import encrypt as cryptic
+from validation import validate
 
 logger = logs.logger
 key = cryptic.get_key()
@@ -104,6 +105,18 @@ def create_user(cursor, db):
 
     USERPASS = getpass(
         "Please enter the password you would like to login with: ")
+
+    strong = validate(USERPASS)
+
+    while strong is False:
+        logger.warn(
+            'Your password must be 8 characters long, contain one uppercase, one lowercase, and one of the following characters: [, ], @, $, #, !, &, *, (, ), ., ?, +, =, -'
+        )
+
+        USERPASS = getpass(
+            "Please enter the password you would like to login with: ")
+
+        strong = validate(USERPASS)
 
     mail.send_test(email, userEmail, emailPass)
 

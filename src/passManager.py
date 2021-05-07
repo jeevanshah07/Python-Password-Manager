@@ -1,4 +1,6 @@
 import os
+import signal
+import sys
 from time import sleep
 import pickle
 from configparser import ConfigParser
@@ -13,9 +15,17 @@ import totp
 import logs
 from rich.prompt import Confirm
 
-key = cryptic.get_key()
 
 logger = logs.logger
+
+def quit():
+    logger.critical("Exiting")
+    return sys.exit(0)
+
+signal.signal(signal.SIGINT, lambda x, y: quit())
+
+key = cryptic.get_key()
+
 
 config = ConfigParser()
 config.read('config.ini')
@@ -28,8 +38,14 @@ user = config.get("MySQL", "User")
 password = config.get("MySQL", "Password")
 database = config.get("MySQL", "Database")
 
-db = server.connect(host, user, password, database)
-c = db.cursor()
+try:
+    db = server.connect(host, user, password, database)
+    c = db.cursor()
+
+except Exception as e:
+    logger.exception(f"Exception {e} caught, exiting...")
+    exit()
+
 MASTERPASS = ""
 USERPASS = ""
 empty = False
@@ -40,85 +56,151 @@ with open("data/save.pickle", "r+b") as f:
         empty = True
         f.close()
 
-if empty is True:
-    while valid is False:
-        MASTERPASS = input(
-            Fore.LIGHTCYAN_EX +
-            "Welcome. To use this program you must first set a master password for you account. This master password must contain at leat 1 lowercase, 1 uppercase, 1 number, and 1 special character. Your password must also be at least 8 characters long. Make sure this is something you can remember as you cannot change this later. Please enter your password here: "
-            + Style.RESET_ALL)
+try:
+    if empty is True:
+        while valid is False:
+            MASTERPASS = input(
+                Fore.LIGHTCYAN_EX +
+                "Welcome. To use this program you must first set a master password for you account. This master password must contain at leat 1 lowercase, 1 uppercase, 1 number, and 1 special character. Your password must also be at least 8 characters long. Make sure this is something you can remember as you cannot change this later. Please enter your password here: "
+                + Style.RESET_ALL)
 
-        if validate(MASTERPASS) is True:
-            with open("data/save.pickle", "r+b") as f:
-                pickle.dump(MASTERPASS, f)
-                f.close()
+            if validate(MASTERPASS) is True:
+                with open("data/save.pickle", "r+b") as f:
+                    pickle.dump(MASTERPASS, f)
+                    f.close()
 
-            valid = True
+                valid = True
 
-        elif validate(MASTERPASS) is False:
-            while True:
-                logger.warn(
-                    Fore.RED +
-                    "\nTry Again! Make sure your password is at least 8 charaters long and contaions 1 lowercase, 1 uppercase, 1 number, and 1 special character. \n"
-                    + Style.RESET_ALL)
-
-                MASTERPASS = input(
-                    Fore.LIGHTCYAN_EX +
-                    "Welcome. To use this program you must first set a master password. This master password must contain at leat 1 lowercase, 1 uppercase, 1 number, and 1 special character. Your password must also be at least 8 characters long. Please enter your password here: "
-                    + Style.RESET_ALL)
-
-                if validate(MASTERPASS) is True:
-                    with open("data/save.pickle", "r+b") as f:
-                        pickle.dump(MASTERPASS, f)
-                        f.close()
-                    break
-
-                else:
+            elif validate(MASTERPASS) is False:
+                while True:
                     logger.warn(
                         Fore.RED +
                         "\nTry Again! Make sure your password is at least 8 charaters long and contaions 1 lowercase, 1 uppercase, 1 number, and 1 special character. \n"
                         + Style.RESET_ALL)
 
-    server.create_user(c, db)
+                    MASTERPASS = input(
+                        Fore.LIGHTCYAN_EX +
+                        "Welcome. To use this program you must first set a master password. This master password must contain at leat 1 lowercase, 1 uppercase, 1 number, and 1 special character. Your password must also be at least 8 characters long. Please enter your password here: "
+                        + Style.RESET_ALL)
 
-if empty is False or MASTERPASS is not None:
-    with open("data/save.pickle", "r+b") as f:
-        MASTERPASS = pickle.load(f)
+                    if validate(MASTERPASS) is True:
+                        with open("data/save.pickle", "r+b") as f:
+                            pickle.dump(MASTERPASS, f)
+                            f.close()
+                        break
 
-log = getpass("Master Password:")
+                    else:
+                        logger.warn(
+                            Fore.RED +
+                            "\nTry Again! Make sure your password is at least 8 charaters long and contaions 1 lowercase, 1 uppercase, 1 number, and 1 special character. \n"
+                            + Style.RESET_ALL)
 
-if log == MASTERPASS:
+        server.create_user(c, db)
 
-    user = console.createUserMenu()
+    if empty is False or MASTERPASS is not None:
+        with open("data/save.pickle", "r+b") as f:
+            MASTERPASS = pickle.load(f)
 
-    if user == 'Add Users':
-        user = server.create_user(c, db)
+    log = getpass("Master Password:")
 
-    c.execute("SELECT pass FROM secrets WHERE username=%s", (user, ))
+    if log == MASTERPASS:
 
-    for x in c:
-        dataPass = str(x)
+        user = console.createUserMenu()
 
-    dataPass = cryptic.decrypt(dataPass, key)
+        if user == 'Add Users':
+            user = server.create_user(c, db)
 
-    loginPass = getpass("Enter your password: ")
-    loginPass = bytes(str(loginPass), 'utf8')
-
-    if loginPass == dataPass:
-        c.execute("SELECT email FROM secrets WHERE username=%s", (user, ))
+        c.execute("SELECT pass FROM secrets WHERE username=%s", (user, ))
 
         for x in c:
-            dataEmail = x
+            dataPass = str(x)
 
-        c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
+        dataPass = cryptic.decrypt(dataPass, key)
 
-        for y in c:
-            secret = str(y)
+        loginPass = getpass("Enter your password: ")
+        loginPass = bytes(str(loginPass), 'utf8')
 
-        tbotp = totp.generate_totp(secret)
-        mail.send_secret(email, dataEmail, emailPass, tbotp)
-        enterTotp = input("Enter the code that was emailed to you: ")
+        if loginPass == dataPass:
+            c.execute("SELECT email FROM secrets WHERE username=%s", (user, ))
 
-        if tbotp == enterTotp:
+            for x in c:
+                dataEmail = x
+
+            c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
+
+            for y in c:
+                secret = str(y)
+
+            tbotp = totp.generate_totp(secret)
+            mail.send_secret(email, dataEmail, emailPass, tbotp)
+            enterTotp = input("Enter the code that was emailed to you: ")
+
+            if tbotp == enterTotp:
+                validation = totp.validate_totp(enterTotp, secret)
+
+                if validation:
+                    logger.info(Fore.LIGHTYELLOW_EX +
+                                "Your code is valid, proceed on!" +
+                                Style.RESET_ALL)
+
+                else:
+                    logger.critical(Fore.RED + "Invalid Code!" +
+                                    Style.RESET_ALL)
+                    exit()
+
+            else:
+                logger.critical(Fore.RED + "Wrong Code!" + Style.RESET_ALL)
+                exit()
+
+        else:
+            logger.critical(Fore.RED + "Wrong Password!" + Style.RESET_ALL)
+            exit()
+
+    else:
+        logger.critical(Fore.RED + "Wrong Master Password!" + Style.RESET_ALL)
+        exit()
+
+    while True:
+        menu = console.createMenu([
+            'Add information', 'Get information', 'Delete information',
+            'Delete User'
+        ])
+
+        if menu == 0:
+            site = input("Enter the site (include 'https://'): ")
+            user = input("Enter the username: ")
+            passwd = input("Enter the password: ")
+            server.insert_password(c, site, user, passwd)
+            logger.info(Fore.GREEN + "Successfully inserted data into table!" +
+                        Style.RESET_ALL)
+
+        elif menu == 1:
+            c.execute("SELECT * FROM passwords")
+            for x in c:
+                logger.info(x)
+
+        elif menu == 2:
+            server.delete(c)
+            logger.warn("Succesfully deleted!")
+
+        elif menu == 3:
+            logger.debug('menu option 4 - delete user')
+            # c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
+            # for y in c:
+            #     secret = str(y)
+
+            # c.execute("SELECT email FROM secrets WHERE username=%s", (user, ))
+
+            # for x in c:
+            #     dataEmail = x
+
+            tbotp = totp.generate_totp(secret)
+            mail.send_secret(email, dataEmail, emailPass, tbotp)
+
+            enterTotp = input(
+                "Please enter the code that was emailed to you for verifaction:"
+            )
+
             validation = totp.validate_totp(enterTotp, secret)
 
             if validation:
@@ -126,77 +208,18 @@ if log == MASTERPASS:
                             "Your code is valid, proceed on!" +
                             Style.RESET_ALL)
 
-            else:
-                logger.critical(Fore.RED + "Invalid Code!" + Style.RESET_ALL)
-                exit()
+            delUser = console.createUserMenu()
+            confirm = Confirm.ask(
+                f'Are you sure you want to delete user {delUser}?')
 
-        else:
-            logger.critical(Fore.RED + "Wrong Code!" + Style.RESET_ALL)
+            log = getpass("Master Password:")
+
+            if log == MASTERPASS:
+                server.delete_user(cursor=c, db=db, user=delUser)
+            sleep(1)
+        elif menu == 4:
+            logger.info(Fore.LIGHTMAGENTA_EX + "Bye!")
             exit()
-
-    else:
-        logger.critical(Fore.RED + "Wrong Password!" + Style.RESET_ALL)
-        exit()
-
-else:
-    logger.critical(Fore.RED + "Wrong Master Password!" + Style.RESET_ALL)
-    exit()
-
-while True:
-    menu = console.createMenu([
-        'Add information', 'Get information', 'Delete information',
-        'Delete User'
-    ])
-
-    if menu == 0:
-        site = input("Enter the site (include 'https://'): ")
-        user = input("Enter the username: ")
-        passwd = input("Enter the password: ")
-        server.insert_password(c, site, user, passwd)
-        logger.info(Fore.GREEN + "Successfully inserted data into table!" +
-                    Style.RESET_ALL)
-
-    elif menu == 1:
-        c.execute("SELECT * FROM passwords")
-        for x in c:
-            logger.info(x)
-
-    elif menu == 2:
-        server.delete(c)
-        logger.warn("Succesfully deleted!")
-
-    elif menu == 3:
-        logger.debug('menu option 4 - delete user')
-        # c.execute("SELECT secret FROM secrets WHERE username=%s", (user, ))
-        # for y in c:
-        #     secret = str(y)
-
-        # c.execute("SELECT email FROM secrets WHERE username=%s", (user, ))
-
-        # for x in c:
-        #     dataEmail = x
-
-        tbotp = totp.generate_totp(secret)
-        mail.send_secret(email, dataEmail, emailPass, tbotp)
-
-        enterTotp = input(
-            "Please enter the code that was emailed to you for verifaction:")
-
-        validation = totp.validate_totp(enterTotp, secret)
-
-        if validation:
-            logger.info(Fore.LIGHTYELLOW_EX +
-                        "Your code is valid, proceed on!" + Style.RESET_ALL)
-
-        delUser = console.createUserMenu()
-        confirm = Confirm.ask(
-            f'Are you sure you want to delete user {delUser}?')
-
-        log = getpass("Master Password:")
-
-        if log == MASTERPASS:
-            server.delete_user(cursor=c, db=db, user=delUser)
-        sleep(1)
-    elif menu == 4:
-        logger.info(Fore.LIGHTMAGENTA_EX + "Bye!")
-        exit()
+except Exception as e:
+    logger.exception(f"Exception {type(e).__name__} caught. Exiting....")
+    sys.exit(0)

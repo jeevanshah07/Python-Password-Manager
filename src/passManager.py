@@ -15,17 +15,17 @@ import totp
 import logs
 from rich.prompt import Confirm
 
-
 logger = logs.logger
+
 
 def quit():
     logger.critical("Exiting")
     return sys.exit(0)
 
+
 signal.signal(signal.SIGINT, lambda x, y: quit())
 
 key = cryptic.get_key()
-
 
 config = ConfigParser()
 config.read('config.ini')

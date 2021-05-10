@@ -8,6 +8,13 @@ import os
 
 
 def get_key():
+    """
+    Retrieves and/or writes the key needed for encryping and decryting items
+
+    Returns: 
+        str
+    """
+
     if os.path.exists('data/key.key'):
         with open('data/key.key', 'r+b') as f:
             key = Fernet.generate_key()
@@ -23,6 +30,17 @@ def get_key():
 
 
 def encrypt(message, key):
+    """
+    Encrypts a passed message using a key
+
+    Args:
+        message (str): The message or item that needs to be encrypted
+        key (str): The Fernet encryption key 
+
+    Returns:
+        bytes: The encrypted message stored in bytes
+    """
+
     message = str(message)
     message = bytes(message, 'utf8')
 
@@ -32,6 +50,17 @@ def encrypt(message, key):
 
 
 def decrypt(message, key):
+    """
+    Decrypts a passed message using a key
+
+    Args:
+        message (str or bytes): The message or item that needs to be decrypted
+        key (str): The Fernet encryption key 
+
+    Returns:
+        str: The decrypted message stored in a string 
+    """
+
     message = str(message)
     message = bytes(message, 'utf8')
 

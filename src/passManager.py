@@ -19,6 +19,12 @@ logger = logs.logger
 
 
 def quit():
+    """
+    Passed a message through the logger before exiting the program with no traceback
+
+    Returns:
+        NoneType: Exits the program
+    """
     logger.critical("Exiting")
     return sys.exit(0)
 

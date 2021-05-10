@@ -2,11 +2,23 @@ import smtplib
 
 
 def send_test(sender_address, receiver_address, password):
-    sender_address = sender_address  # Replace this with your Gmail address
+    """
+    Sends a test email to a user to make sure they passed the correct email
 
-    receiver_address = receiver_address  # Replace this with any valid email address
+    Args:
+        sender_address (str): The address used to send the email
+        receiver_address (str): The address to receive the sent email
+        password (str): The password for the sender address
 
-    account_password = password  # Replace this with your Gmail account password
+    Notes:
+        No return value
+    """
+
+    sender_address = sender_address
+
+    receiver_address = receiver_address
+
+    account_password = password
 
     subject = "Test Email using Python"
 
@@ -29,11 +41,24 @@ def send_test(sender_address, receiver_address, password):
 
 
 def send_secret(sender_address, receiver_address, password, oneTimeKey):
-    sender_address = sender_address  # Replace this with your Gmail address
+    """
+    Sends a one time password in an email to a user
 
-    receiver_address = receiver_address  # Replace this with any valid email address
+    Args:
+        sender_address (str): The address used to send the email
+        receiver_address (str): The address to receive the sent email
+        password (str): The password for the sender address
+        oneTimeKey (int or str): A time base one time key used for authentication
 
-    account_password = password  # Replace this with your Gmail account password
+    Notes:
+        No return value
+    """
+
+    sender_address = sender_address
+
+    receiver_address = receiver_address
+
+    account_password = password
 
     subject = "Secret Key"
 

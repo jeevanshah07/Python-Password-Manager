@@ -80,7 +80,7 @@ def create_user_table(cursor, db, user):
     Args:
         cursor (mysql.connector.cursor.MySQLCursor): The database cursor
         db (mysql.connector.connection.MySQLConnection): The database for storying data
-        user (str): The user to name the table after 
+        user (str): The user to name the table after
     """
 
     cursor.execute("""CREATE TABLE IF NOT EXISTS """ + user + """ (
@@ -173,7 +173,7 @@ def create_user(cursor, db):
         db (mysql.connector.connection.MySQLConnection): The database for storying data
 
     Returns:
-        str: The selected username choosen 
+        str: The selected username choosen
     """
 
     logger.info(Fore.GREEN + "Welcome to user setup." + Style.RESET_ALL)

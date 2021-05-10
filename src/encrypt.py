@@ -11,7 +11,7 @@ def get_key():
     """
     Retrieves and/or writes the key needed for encryping and decryting items
 
-    Returns: 
+    Returns:
         str
     """
 
@@ -35,7 +35,7 @@ def encrypt(message, key):
 
     Args:
         message (str): The message or item that needs to be encrypted
-        key (str): The Fernet encryption key 
+        key (str): The Fernet encryption key
 
     Returns:
         bytes: The encrypted message stored in bytes
@@ -55,10 +55,10 @@ def decrypt(message, key):
 
     Args:
         message (str or bytes): The message or item that needs to be decrypted
-        key (str): The Fernet encryption key 
+        key (str): The Fernet encryption key
 
     Returns:
-        str: The decrypted message stored in a string 
+        str: The decrypted message stored in a string
     """
 
     message = str(message)

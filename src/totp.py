@@ -15,7 +15,7 @@ def generate_shared_secret() -> str:
     Generates a secret needed for the time based one time password
 
     Returns:
-        hex: a token 
+        hex: a token
     """
     return secrets.token_hex(16)
 
@@ -65,11 +65,11 @@ def generate_totp(shared_key: str, length: int = 6) -> str:
 
 def validate_totp(totp: str, shared_key: str) -> bool:
     """
-    Validates the time based one time password 
+    Validates the time based one time password
 
     Args:
         totp (str): The actual time based one time password
-        shared_key (str): The shared key 
+        shared_key (str): The shared key
 
     Returns:
         bool

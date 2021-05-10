@@ -1,7 +1,18 @@
-def validate(password: str):
+"""
+Credit to Sci Prog on stackoverflow for the code.
+https://stackoverflow.com/questions/35857967/python-password-requirement-program
+"""
+
+
+def validate(password: str) -> bool:
     """
-    Credit to Sci Prog on stackoverflow for the code.
-    https://stackoverflow.com/questions/35857967/python-password-requirement-program
+    Validates a password to make sure it follows the requirments
+
+    Args:
+        password (str): The password to validate
+
+    Returns:
+        bool
     """
     SPECIAL = "@$#!&*()[].,?+=-"
 

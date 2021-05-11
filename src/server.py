@@ -1,4 +1,5 @@
 from getpass import getpass
+import console
 import mysql.connector
 from configparser import ConfigParser
 from colorama import Fore, Style
@@ -47,7 +48,6 @@ def connect(host, user, password, database):
 
 db = connect(host, user, password, database)
 c = db.cursor()
-print(type(c))
 
 
 def create_tables(cursor, db):
@@ -97,8 +97,7 @@ def create_user_table(cursor, db, user):
     logger.info("Passwords Table created")
 
 
-def insert_password(cursor, site, user, passwd):
-    # TODO: passwords need to be inserted into user tables
+def insert_password(cursor, db, site, user, passwd, username):
     """
     Inserts a password and the nessecary information needed into a table
 
@@ -111,8 +110,12 @@ def insert_password(cursor, site, user, passwd):
     Notes:
         No return value
     """
+
+    logger.debug(username)
+
     cursor.execute(
-        "INSERT INTO passwords (site, username, password) VALUES (%s,%s,%s)",
+        "INSERT INTO " + username +
+        " (site, username, password) VALUES (%s,%s,%s)",
         (site, user, passwd),
     )
     db.commit()
@@ -140,24 +143,25 @@ def insert_master(cursor, user, email, password, secret):
     db.commit()
 
 
-def delete(cursor):
+def delete(cursor, user):
     """
     Deletes a username, password, and website from the stored table
 
     Args:
         cursor (mysql.connector.cursor.MySQLCursor): The databse cursor
+        user (str): The user which is also the name of the table
 
     Notes:
         No return value
     """
 
-    # TODO: delete from the user table instead of the password
     # TODO: change to use a menu which lists all passwords, then have the user choose from those
     everything = Prompt.ask("Would you like to delete all entries?",
                             choices=['yes', 'no'])
     if everything == 'no':
-        identify = input("Enter the ID of the entry you would like to delete")
-        cursor.execute("DELETE FROM password WHERE id=%", (identify, ))
+        identify = console.createPassMenu(cursor, user)
+        # identify = input("Enter the ID of the entry you would like to delete")
+        cursor.execute("DELETE FROM" + user + "WHERE id=%", (identify, ))
         db.commit()
     elif everything == 'yes':
         cursor.execute("DELETE FROM passwords")
@@ -220,9 +224,25 @@ def delete_user(cursor, db, user):
         db (mysql.connector.connection.MySQLConnection): The database for storying data
         user (str): The username to delete
     """
-    # TODO: insert variable names in sql statement
     cursor.execute("DELETE FROM secrets WHERE username=%s", (user, ))
     db.commit()
 
     db.commit()
     logger.warn(Fore.RED + f"Deleted User {user}" + Style.RESET_ALL)
+
+
+def get_info(cursor, user):
+    """
+    Retrives passwords from a table
+
+    Args:
+        cursor (mysql.connector.cursor.MySQLCursor): the cursor for the databse
+        user (str): The usrename that is also the name of the table
+    """
+
+    cursor.execute("SELECT * FROM " + user)
+
+    for i in cursor:
+        logger.info(i)
+
+    input("Press ENTER to continue")

@@ -141,7 +141,7 @@ try:
             mail.send_secret(email, dataEmail, emailPass, tbotp)
             logger.debug(tbotp)
             enterTotp = input("Enter the code that was emailed to you: ")
-    
+
             if tbotp == enterTotp:
                 validation = totp.validate_totp(enterTotp, secret)
 

@@ -9,11 +9,15 @@ import mail
 import totp
 import encrypt as cryptic
 from validation import validate
+from rich.table import Table
+from rich.console import Console as konsole
 
 logger = logs.logger
 key = cryptic.get_key()
 config = ConfigParser()
 config.read('config.ini')
+
+terminal = konsole()
 
 host = config.get("MySQL", "Host")
 user = config.get("MySQL", "User")
@@ -112,6 +116,8 @@ def insert_password(cursor, db, site, user, passwd, username):
     """
 
     logger.debug(username)
+
+    passwd = cryptic.encrypt(passwd, key)
 
     cursor.execute(
         "INSERT INTO " + username +
@@ -240,9 +246,33 @@ def get_info(cursor, user):
         user (str): The usrename that is also the name of the table
     """
 
-    cursor.execute("SELECT * FROM " + user)
+    table = Table(title="Passwords")
+    table.add_column("Website", justify="center", no_wrap=True)
+    table.add_column("Username", justify="center", no_wrap=True)
+    table.add_column("Password", justify="center", no_wrap=True)
+
+    website_login = []
+    website_name = []
+    website_password = []
+
+    cursor.execute("SELECT site FROM " + user)
 
     for i in cursor:
-        logger.info(i)
+        website_name.append(i)
+
+    cursor.execute("SELECT username FROM " + user)
+
+    for i in cursor:
+        website_login.append(i)
+
+    cursor.execute("SELECT password FROM " + user)
+
+    for i in cursor:
+        i = str(i)
+        i = cryptic.decrypt(i, key)
+        website_password.append(i)
+
+    for i in range(len(website_password)):
+        table.add_row(website_name[i], website_name[i], website_password[i])
 
     input("Press ENTER to continue")

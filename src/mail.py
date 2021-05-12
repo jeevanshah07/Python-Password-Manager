@@ -20,9 +20,9 @@ def send_test(sender_address, receiver_address, password):
 
     account_password = password
 
-    subject = "Test Email using Python"
+    subject = "Confirmation Email using Python"
 
-    body = "Here is the test email from the sql password manager!\n\nHappy to hear from you!\nWith regards,\n\tDeveloper"
+    body = "Here is the test email from the password manager!\n\nHappy to hear from you!\nWith regards,\n\tDeveloper"
 
     # Endpoint for the SMTP Gmail server (Don't change this!)
     smtp_server = smtplib.SMTP_SSL("smtp.gmail.com", 465)

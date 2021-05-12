@@ -96,7 +96,7 @@ def create_user_table(cursor, db, user):
 
     db.commit()
 
-    print(Fore.MAGENTA + "Table passwords created!" + Style.RESET_ALL)
+    logger.info(Fore.MAGENTA + "Table passwords created!" + Style.RESET_ALL)
 
     logger.info("Passwords Table created")
 

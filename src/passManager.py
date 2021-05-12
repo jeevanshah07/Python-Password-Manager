@@ -139,7 +139,6 @@ try:
 
             tbotp = totp.generate_totp(secret)
             mail.send_secret(email, dataEmail, emailPass, tbotp)
-            logger.debug(tbotp)
             enterTotp = input("Enter the code that was emailed to you: ")
 
             if tbotp == enterTotp:

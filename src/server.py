@@ -258,21 +258,25 @@ def get_info(cursor, user):
     cursor.execute("SELECT site FROM " + user)
 
     for i in cursor:
+        i = str(i)
         website_name.append(i)
 
     cursor.execute("SELECT username FROM " + user)
 
     for i in cursor:
+        i = str(i)
         website_login.append(i)
 
     cursor.execute("SELECT password FROM " + user)
 
     for i in cursor:
-        i = str(i)
         i = cryptic.decrypt(i, key)
+        i = str(i)
         website_password.append(i)
 
     for i in range(len(website_password)):
         table.add_row(website_name[i], website_name[i], website_password[i])
+
+    terminal.print(table)
 
     input("Press ENTER to continue")

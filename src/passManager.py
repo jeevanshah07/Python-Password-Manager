@@ -40,12 +40,12 @@ email = config.get("Email", "Email")
 emailPass = config.get("Email", "Password")
 
 host = config.get("MySQL", "Host")
-user = config.get("MySQL", "User")
+sql_user = config.get("MySQL", "User")
 password = config.get("MySQL", "Password")
 database = config.get("MySQL", "Database")
 
 try:
-    db = server.connect(host, user, password, database)
+    db = server.connect(host, sql_user, password, database)
     c = db.cursor()
 
 except Exception as e:
@@ -111,7 +111,7 @@ try:
 
     if log == MASTERPASS:
 
-        user = console.createUserMenu()
+        user = console.createUserMenu(c)
 
         if user == 'Add Users':
             user = server.create_user(c, db)
@@ -139,12 +139,13 @@ try:
 
             tbotp = totp.generate_totp(secret)
             mail.send_secret(email, dataEmail, emailPass, tbotp)
+            logger.debug(tbotp)
             enterTotp = input("Enter the code that was emailed to you: ")
 
             if tbotp == enterTotp:
                 validation = totp.validate_totp(enterTotp, secret)
 
-                if validation:
+                if validation is True:
                     logger.info(Fore.LIGHTYELLOW_EX +
                                 "Your code is valid, proceed on!" +
                                 Style.RESET_ALL)
@@ -174,19 +175,17 @@ try:
 
         if menu == 0:
             site = input("Enter the site (include 'https://'): ")
-            user = input("Enter the username: ")
+            login = input("Enter the username: ")
             passwd = input("Enter the password: ")
-            server.insert_password(c, site, user, passwd)
+            server.insert_password(c, db, site, login, passwd, user)
             logger.info(Fore.GREEN + "Successfully inserted data into table!" +
                         Style.RESET_ALL)
 
         elif menu == 1:
-            c.execute("SELECT * FROM passwords")
-            for x in c:
-                logger.info(x)
+            server.get_info(c, user)
 
         elif menu == 2:
-            server.delete(c)
+            server.delete(c, user)
             logger.warn("Succesfully deleted!")
 
         elif menu == 3:
@@ -214,7 +213,7 @@ try:
                             "Your code is valid, proceed on!" +
                             Style.RESET_ALL)
 
-            delUser = console.createUserMenu()
+            delUser = console.createUserMenu(c)
             confirm = Confirm.ask(
                 f'Are you sure you want to delete user {delUser}?')
 

@@ -52,7 +52,7 @@ def generate_totp(shared_key: str, length: int = 6) -> str:
         str: The time based one time password
     """
     now_in_seconds = math.floor(time.time())
-    step_in_seconds = 30
+    step_in_seconds = 60
     t = math.floor(now_in_seconds / step_in_seconds)
     hash = hmac.new(
         bytes(shared_key, encoding="utf-8"),

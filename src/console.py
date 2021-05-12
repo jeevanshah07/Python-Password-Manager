@@ -1,5 +1,4 @@
 from consolemenu import SelectionMenu
-import server
 
 
 def createMenu(options: list):
@@ -18,7 +17,7 @@ def createMenu(options: list):
     return selection
 
 
-def createUserMenu():
+def createUserMenu(c):
     """
     Creates a selection menu based on a list of users
 
@@ -27,7 +26,6 @@ def createUserMenu():
     """
 
     users = ['Add Users']
-    c = server.db.cursor()
     c.execute("SELECT username FROM secrets")
 
     for i in c:
@@ -39,3 +37,29 @@ def createUserMenu():
 
     user = createMenu(users)
     return str(users[user])
+
+
+def createPassMenu(c, username):
+    """
+    Creates a selection menu based on a list of websites
+
+    Args:
+        username (str): The username which is also the name of the table
+
+    Returns:
+        str: The id of the website choosen
+    """
+
+    websites = []
+
+    c.execute("SELECT site FROM " + username)
+
+    for i in c:
+        i = str(i).replace("(", "")
+        i = i.replace(")", "")
+        i = i.replace(",", "")
+        i = i.replace("'", "")
+        websites.append(i)
+
+    website = createMenu(websites)
+    return str(websites[website])

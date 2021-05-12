@@ -182,4 +182,5 @@ test.py
 !/data/key.example.key
 !/data/save.example.pickle
 test.py
+!logs/logs.log
 
